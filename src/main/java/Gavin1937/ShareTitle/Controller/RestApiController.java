@@ -55,10 +55,9 @@ public class RestApiController
         JSONObject resp = new JSONObject();
         resp.put("ok", true);
         resp.put("sharetitle_count", db.numberOfWebsites());
-        resp.put("last_update_time", db.lastUpdateTime().getTime()/1000);
+        resp.put("last_update_time", db.lastUpdateTime());
         
-        MyLogger.info("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
-        MyLogger.info("Response data: {}", resp.toString());
+        __logRequestResp("INFO", request, resp);
         return __genJsonResponse(resp, HttpStatus.OK);
     }
     
@@ -98,8 +97,19 @@ public class RestApiController
     {
         // generate sharetitle array
         int intlimit = -1;
-        if (limit != null && !limit.isEmpty())
-            intlimit = Integer.valueOf(limit);
+        try
+        {
+            if (limit != null && !limit.isEmpty())
+                intlimit = Integer.valueOf(limit);
+        }
+        catch (Exception e)
+        {
+            JSONObject resp = new JSONObject();
+            resp.put("ok", false);
+            resp.put("error", "Invalid limit input, not an integer.");
+            __logRequestResp("WARN", request, resp);
+            return __genJsonResponse(resp, HttpStatus.BAD_REQUEST);
+        }
         JSONArray sharetitle = new JSONArray();
         ArrayList<WebsiteModel> websites = db.getAllWebsites();
         for (int idx = 0; idx < websites.size(); ++idx)
@@ -115,8 +125,7 @@ public class RestApiController
         resp.put("sharetitles", sharetitle);
         
         
-        MyLogger.info("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
-        MyLogger.info("Responsing {} sharetitles", sharetitle.length());
+        __logRequestResp("INFO", request, resp);
         return __genJsonResponse(resp, HttpStatus.OK);
     }
     
@@ -157,8 +166,7 @@ public class RestApiController
             JSONObject resp = new JSONObject();
             resp.put("ok", false);
             resp.put("error", "Input id must be an integer.");
-            MyLogger.warn("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
-            MyLogger.warn("Invalid id input, not an integer.");
+            __logRequestResp("WARN", request, resp);
             
             return __genJsonResponse(resp, HttpStatus.BAD_REQUEST);
         }
@@ -171,16 +179,14 @@ public class RestApiController
             status = HttpStatus.BAD_REQUEST;
             resp.put("ok", false);
             resp.put("error", "Input id does not exists.");
-            MyLogger.warn("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
-            MyLogger.warn("Invalid id input, id does not exists.");
+            __logRequestResp("WARN", request, resp);
         }
         else
         {
             status = HttpStatus.OK;
             resp.put("ok", true);
             resp.put("sharetitle", website.toJson());
-            MyLogger.info("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
-            MyLogger.info("Response data: {}", resp.toString());
+            __logRequestResp("INFO", request, resp);
         }
         
         return __genJsonResponse(resp, status);
@@ -219,8 +225,7 @@ public class RestApiController
         resp.put("ok", (entry != null));
         resp.put("sharetitle", entry.toJson());
         
-        MyLogger.info("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
-        MyLogger.info("Response data: {}", resp.toString());
+        __logRequestResp("INFO", request, resp);
         return __genJsonResponse(resp, HttpStatus.OK);
     }
     
@@ -231,6 +236,37 @@ public class RestApiController
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
         return new ResponseEntity<String>(response.toString(), headers, status);
+    }
+    
+    private void __logRequestResp(String logLevel, HttpServletRequest request, JSONObject resp)
+    {
+        switch (logLevel.toUpperCase())
+        {
+        case "TRACE":
+            MyLogger.trace("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
+            MyLogger.trace("Response data: {}", resp.toString());
+            break;
+        case "DEBUG":
+            MyLogger.debug("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
+            MyLogger.debug("Response data: {}", resp.toString());
+            break;
+        case "INFO":
+            MyLogger.info("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
+            MyLogger.info("Response data: {}", resp.toString());
+            break;
+        case "WARN":
+            MyLogger.warn("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
+            MyLogger.warn("{}", resp.getString("error"));
+            break;
+        case "ERROR":
+            MyLogger.error("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
+            MyLogger.error("{}", resp.getString("error"));
+            break;
+        default:
+            MyLogger.info("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
+            MyLogger.info("Response data: {}", resp.toString());
+            break;
+        }
     }
     
     

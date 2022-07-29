@@ -1,10 +1,10 @@
 package Gavin1937.ShareTitle.Model;
 
-import java.sql.Date;
 import org.json.JSONObject;
 
 public class WebsiteModel
 {
+    
     public WebsiteModel(
         int id, String title,
         String url, String domain,
@@ -18,9 +18,9 @@ public class WebsiteModel
         __domain = domain;
         __parentChild = parentChild;
         __isVisited = isVisited;
-        __time = new Date(time);
+        __time = time;
     }
-
+    
     public int getId()
     {
         return __id;
@@ -45,7 +45,7 @@ public class WebsiteModel
     {
         return __isVisited;
     }
-    public Date getTime()
+    public int getTime()
     {
         return __time;
     }
@@ -64,7 +64,7 @@ public class WebsiteModel
         ret.put("domain", __domain);
         ret.put("parent_child", __parentChild);
         ret.put("is_visited", __isVisited);
-        ret.put("time", __time.getTime());
+        ret.put("time", __time);
         return ret;
     }
     
@@ -76,7 +76,7 @@ public class WebsiteModel
         __domain = json.getString("domain");
         __parentChild = json.getInt("parent_child");
         __isVisited = json.getInt("is_visited");
-        __time = new Date(json.getInt("time"));
+        __time = json.getInt("time");
     }
     
     // private members
@@ -86,5 +86,5 @@ public class WebsiteModel
     private String __domain;
     private int __parentChild;
     private int __isVisited;
-    private Date __time;
+    private int __time;
 }

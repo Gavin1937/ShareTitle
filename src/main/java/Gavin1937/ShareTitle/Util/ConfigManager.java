@@ -65,8 +65,6 @@ public class ConfigManager
     }
     
     
-    // private helper functions
-    
     // private constructor for singleton
     private ConfigManager() {}
     

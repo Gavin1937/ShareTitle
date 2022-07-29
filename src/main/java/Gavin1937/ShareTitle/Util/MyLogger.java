@@ -19,16 +19,25 @@ public class MyLogger
     public static void init(String path)
     {
         if (__logger != null)
+        {
             __logger.detachAndStopAllAppenders();
+            __logger = null;
+            System.gc();
+        }
         
         __path = path;
         
         LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
         PatternLayoutEncoder ple = new PatternLayoutEncoder();
+        PatternLayoutEncoder ple_color = new PatternLayoutEncoder();
         
         ple.setPattern(__pattern);
         ple.setContext(lc);
         ple.start();
+        
+        ple_color.setPattern(__colorPattern);
+        ple_color.setContext(lc);
+        ple_color.start();
         
         FileAppender<ILoggingEvent> fileAppender = new FileAppender<ILoggingEvent>();
         fileAppender.setName("fileAppender");
@@ -39,7 +48,7 @@ public class MyLogger
         
         ConsoleAppender<ILoggingEvent> consoleAppender = new ConsoleAppender<ILoggingEvent>();
         consoleAppender.setName("consoleAppender");
-        consoleAppender.setEncoder(ple);
+        consoleAppender.setEncoder(ple_color);
         consoleAppender.setContext(lc);
         consoleAppender.start();
         
@@ -72,7 +81,7 @@ public class MyLogger
     {
         return __pattern;
     }
-
+    
     public static String getPath()
     {
         return __path;
@@ -84,18 +93,27 @@ public class MyLogger
         __logger.setLevel(__level);
     }
     
-    public static void setPattern(String pattern)
+    public static void setPattern(String pattern, String colorPattern)
     {
         __pattern = pattern;
+        if (colorPattern != null && !colorPattern.isEmpty())
+            __colorPattern = colorPattern;
+        else
+            __colorPattern = pattern;
         
         // reset all appenders with new __pattern
         LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
         PatternLayoutEncoder ple = new PatternLayoutEncoder();
+        PatternLayoutEncoder ple_color = new PatternLayoutEncoder();
         
         ple.setPattern(__pattern);
         ple.setContext(lc);
         ple.start();
-
+        
+        ple_color.setPattern(__colorPattern);
+        ple_color.setContext(lc);
+        ple_color.start();
+        
         FileAppender<ILoggingEvent> fileAppender =
             (FileAppender<ILoggingEvent>)__logger.getAppender("fileAppender");
         ConsoleAppender<ILoggingEvent> consoleAppender =
@@ -105,7 +123,7 @@ public class MyLogger
         fileAppender.setEncoder(ple);
         
         consoleAppender.setContext(lc);
-        consoleAppender.setEncoder(ple);
+        consoleAppender.setEncoder(ple_color);
         
         __logger.detachAndStopAllAppenders();
         
@@ -175,7 +193,8 @@ public class MyLogger
     // private members
     private static Logger __logger = null;
     private static Level __level = Level.INFO;
-    private static String __pattern = "[%yellow(%date)][%boldBlue(%-5level)] - %msg%n";
+    private static String __pattern = "[%date][%-5level] - %msg%n";
+    private static String __colorPattern = "[%yellow(%date)][%boldBlue(%-5level)] - %msg%n";
     private static String __path = null;
 }
 

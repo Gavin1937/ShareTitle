@@ -10,19 +10,19 @@
     </parent>
     <groupId>Gavin1937</groupId>
     <artifactId>ShareTitle</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>ShareTitle</name>
     <description>Share &amp; Parse Website Title &amp; URL</description>
     <properties>
         <java.version>17</java.version>
     </properties>
     <dependencies>
-
+        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
+        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -65,18 +65,18 @@
             <version>2.11.0</version>
         </dependency>
         
-                <dependency>
+        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
             <version>1.2.11</version>
         </dependency>
-
+        
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.2.11</version>
         </dependency>
-
+        
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -84,7 +84,7 @@
         </dependency>
         
     </dependencies>
-
+    
     <build>
         <plugins>
             <plugin>
@@ -92,6 +92,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        <finalName>${project.artifactId}</finalName>
     </build>
-
+    
 </project>

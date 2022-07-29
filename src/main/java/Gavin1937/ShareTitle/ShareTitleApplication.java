@@ -49,6 +49,7 @@ public class ShareTitleApplication
         MyLogger.info("Info msg for testing.");
         MyLogger.warn("Warn msg for testing.");
         MyLogger.error("Error msg for testing.");
+        
         SpringApplication.run(ShareTitleApplication.class, args);
         
     }
@@ -58,4 +59,5 @@ public class ShareTitleApplication
     {
         MyLogger.init(config.getLogPath(), config.getLogLevel());
     }
+    
 }

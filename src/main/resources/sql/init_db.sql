@@ -13,10 +13,10 @@ CREATE TABLE IF NOT EXISTS websites(
 
 CREATE TABLE IF NOT EXISTS table_update_info(
     name            TEXT PRIMARY KEY                    NOT NULL,
-    mtime           DATETIME                            DEFAULT CURRENT_TIMESTAMP
+    mtime           INTEGER                             DEFAULT 0  -- unix timestamp
 );
 
-REPLACE INTO table_update_info VALUES("websites", CURRENT_TIMESTAMP);
+REPLACE INTO table_update_info VALUES("websites", STRFTIME("%s", "now"));
 
 COMMIT;
 

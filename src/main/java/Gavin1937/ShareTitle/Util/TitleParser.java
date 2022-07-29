@@ -18,7 +18,7 @@ public class TitleParser
             throw new Exception("Do not have parse script.");
         
         
-        __clearMembers();        
+        __clearMembers();
         
         // loop through all parse script and try to parse input text
         for (int i = 0; i < __parseScript.length(); ++i)

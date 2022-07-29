@@ -1,7 +1,6 @@
 package Gavin1937.ShareTitle.Util;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
@@ -9,36 +8,23 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.util.FileCopyUtils;
 
 import java.util.ArrayList;
-import java.time.Instant;
-import java.sql.Date;
 import java.io.InputStreamReader;
 import java.io.File;
 
 import Gavin1937.ShareTitle.Model.WebsiteModel;
 import Gavin1937.ShareTitle.Util.TitleParser;
 import Gavin1937.ShareTitle.Util.MyLogger;
+import Gavin1937.ShareTitle.Util.Utilities;
 
 
 public class DbManager
 {
-    
-    private DbManager()
-    {
-    }
-    
-    public void finalize() throws Exception
-    {
-        if (__dbConnection != null)
-            __dbConnection.close();
-    }
-    
-    
-    // api
     
     public static DbManager getInstance()
     {
@@ -78,30 +64,30 @@ public class DbManager
         }
         catch (SQLException e)
         {
-            MyLogger.error("Exception: " + e.getMessage());
+            MyLogger.error("SQLException: " + e.getMessage());
             return -1;
         }
         return ret;
     }
     
-    public Date lastUpdateTime()
+    public int lastUpdateTime()
         throws Exception
     {
         __checkConnection();
         
-        Date ret = new Date(0);
+        int ret = -1;
         try
         {
             String sql = "SELECT mtime from table_update_info WHERE name = \"websites\";";
             Statement select = __dbConnection.createStatement();
             ResultSet rs = select.executeQuery(sql);
             if (rs.next())
-                ret = rs.getDate(1);
+                ret = rs.getInt(1);
         }
         catch (SQLException e)
         {
-            MyLogger.error("Exception: " + e.getMessage());
-            return new Date(0);
+            MyLogger.error("SQLException: " + e.getMessage());
+            return -1;
         }
         
         return ret;
@@ -131,6 +117,7 @@ public class DbManager
         }
         catch (SQLException e)
         {
+            MyLogger.error("SQLException: " + e.getMessage());
             return null;
         }
         return ret;
@@ -161,8 +148,8 @@ public class DbManager
         }
         catch (SQLException e)
         {
-            MyLogger.error("Exception: " + e.getMessage());
-            return new ArrayList<WebsiteModel>();
+            MyLogger.error("SQLException: " + e.getMessage());
+            return null;
         }
         return ret;
     }
@@ -188,14 +175,14 @@ public class DbManager
                 insert.setString(2, TitleParser.getUrl());
                 insert.setString(3, TitleParser.getDomain());
                 insert.setInt(4, TitleParser.getParentChild());
-                insert.setInt(5, (int)(Instant.now().toEpochMilli()/1000));
+                insert.setInt(5, Utilities.getUnixTimestampNow());
                 
                 insert.executeUpdate();
             }
             else
                 return null;
             
-            // get latest id
+            // get newly inserted website
             sql = """
                 SELECT * FROM websites
                 WHERE id = (SELECT MAX(id) FROM websites)
@@ -216,7 +203,7 @@ public class DbManager
         }
         catch (SQLException e)
         {
-            MyLogger.error("Exception: " + e.getMessage());
+            MyLogger.error("SQLException: " + e.getMessage());
             return null;
         }
         
@@ -241,7 +228,7 @@ public class DbManager
         }
         catch (SQLException e)
         {
-            MyLogger.error("Exception: " + e.getMessage());
+            MyLogger.error("SQLException: " + e.getMessage());
             return -1;
         }
         return id;
@@ -329,6 +316,7 @@ public class DbManager
             InputStreamReader reader = new InputStreamReader(resource.getInputStream());
             String sql = FileCopyUtils.copyToString(reader);;
             reader.close();
+            ((ConfigurableApplicationContext)appContext).close();
             
             // parse sql string to individual statements
             ArrayList<String> sql_commands = __parseSql(sql);
@@ -343,7 +331,7 @@ public class DbManager
         }
         catch (Exception e)
         {
-            MyLogger.error("Exception: " + e.getMessage());
+            MyLogger.error("SQLException: " + e.getMessage());
             throw e;
         }
     }
@@ -352,7 +340,10 @@ public class DbManager
         throws Exception
     {
         if (__dbConnection == null)
+        {
+            MyLogger.warn("Did not connect to database.");
             throw new Exception("Did not connect to database.");
+        }
     }
     
     private void __updateMtime()
@@ -362,17 +353,29 @@ public class DbManager
         {
             String sql = """
                 UPDATE table_update_info
-                SET mtime = CURRENT_TIMESTAMP
+                SET mtime = ?
                 WHERE name = \"websites\"
             ;""";
             PreparedStatement update = __dbConnection.prepareStatement(sql);
+            update.setInt(1, Utilities.getUnixTimestampNow());
             update.executeUpdate();
         }
-        catch (Exception e)
+        catch (SQLException e)
         {
-            MyLogger.error(e.getMessage());
+            MyLogger.error("SQLException: " + e.getMessage());
             throw e;
         }
+    }
+    
+    
+    // private constructor for singleton
+    private DbManager() {}
+    
+    // destructor
+    public void finalize() throws Exception
+    {
+        if (__dbConnection != null)
+            __dbConnection.close();
     }
     
     

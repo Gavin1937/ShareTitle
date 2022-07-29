@@ -12,41 +12,41 @@ public class ConfigManager
     
     public static ConfigManager getInstance()
     {
-        if (__Instance == null)
-            __Instance = new ConfigManager();
-        return __Instance;
+        if (__instance == null)
+            __instance = new ConfigManager();
+        return __instance;
     }
     
     public void readConfig(String config_path)
         throws IOException
     {
         String content = FileUtils.readFileToString(new File(config_path), "UTF-8");
-        __Config = new JSONObject(content);
+        __config = new JSONObject(content);
     }
     
     public JSONObject getJson()
     {
-        return __Config;
+        return __config;
     }
     
     public String getDbPath()
     {
-        return __Config.getString("database_path");
+        return __config.getString("database_path");
     }
     
     public String getTitleParseScriptPath()
     {
-        return __Config.getString("title_parse_script");
+        return __config.getString("title_parse_script");
     }
     
     public String getLogPath()
     {
-        return __Config.getString("log_path");
+        return __config.getString("log_path");
     }
     
     public Level getLogLevel()
     {
-        String level = __Config.getString("log_level").toUpperCase();
+        String level = __config.getString("log_level").toUpperCase();
         switch (level)
         {
         case "TRACE":
@@ -70,7 +70,7 @@ public class ConfigManager
     
     
     // private members 
-    private static ConfigManager __Instance = null;
-    private JSONObject __Config = new JSONObject();
+    private static ConfigManager __instance = null;
+    private JSONObject __config = new JSONObject();
     
 }

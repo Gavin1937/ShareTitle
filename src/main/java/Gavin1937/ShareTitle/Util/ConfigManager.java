@@ -29,6 +29,18 @@ public class ConfigManager
         return __config;
     }
     
+    public boolean isAuthRequired()
+    {
+        return __config.getBoolean("require_auth");
+    }
+    
+    public String getAuthDbPath()
+    {
+        if (!isAuthRequired())
+            return null;
+        return __config.getString("auth_database_path");
+    }
+    
     public String getDbPath()
     {
         return __config.getString("database_path");

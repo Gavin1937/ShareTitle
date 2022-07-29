@@ -28,7 +28,19 @@ public class AuthManager
     {
         __requireAuth = require_auth;
         if (__requireAuth)
+        {
+            if (dbpath == null || dbpath.isEmpty())
+            {
+                MyLogger.error("Missing path to Authentication Database");
+                throw new Exception("Missing path to Authentication Database");
+            }
             __initDb(dbpath);
+        }
+    }
+    
+    public static final boolean isAuthRequired()
+    {
+        return __requireAuth;
     }
     
     public static boolean auth(String username, String auth_hash)
@@ -87,13 +99,6 @@ public class AuthManager
         }
         
         return ret;
-    }
-    
-    public static boolean isAuthRequired()
-        throws Exception
-    {
-        __checkConnection();
-        return __requireAuth;
     }
     
     

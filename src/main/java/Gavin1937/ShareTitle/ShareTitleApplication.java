@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import Gavin1937.ShareTitle.Util.MyLogger;
 import Gavin1937.ShareTitle.Util.ConfigManager;
 import Gavin1937.ShareTitle.Util.DbManager;
+import Gavin1937.ShareTitle.Util.AuthManager;
 import Gavin1937.ShareTitle.Util.TitleParser;
 
 
@@ -34,6 +35,7 @@ public class ShareTitleApplication
             }
             MyLogger.init(config.getLogPath(), config.getLogLevel());
             db.connect(config.getDbPath());
+            AuthManager.connect(config.isAuthRequired(), config.getAuthDbPath());
             TitleParser.setParseScript(config.getTitleParseScriptPath());
         }
         catch (Exception e)

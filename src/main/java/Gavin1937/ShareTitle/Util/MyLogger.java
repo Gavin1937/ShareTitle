@@ -194,7 +194,7 @@ public class MyLogger
     private static Logger __logger = null;
     private static Level __level = Level.INFO;
     private static String __pattern = "[%date][%-5level] - %msg%n";
-    private static String __colorPattern = "[%yellow(%date)][%boldBlue(%-5level)] - %msg%n";
+    private static String __colorPattern = "[%yellow(%date)][%boldBlue(%-5level)] - %-256msg%n";
     private static String __path = null;
 }
 

@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.http.HttpHeaders;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import Gavin1937.ShareTitle.Model.WebsiteModel;
 import Gavin1937.ShareTitle.Util.DbManager;
+import Gavin1937.ShareTitle.Util.AuthManager;
 import Gavin1937.ShareTitle.Util.MyLogger;
+import Gavin1937.ShareTitle.Util.Utilities;
 
 @RestController
 @RequestMapping("/api")
@@ -48,17 +50,24 @@ public class RestApiController
      * @throws Exception
      */
     @GetMapping(value="/status")
-    public ResponseEntity<String> getStatus(
+    public ResponseEntity<Object> getStatus(
+        @CookieValue(value="username", required=false) String username,
+        @CookieValue(value="auth_hash", required=false) String auth_hash,
         HttpServletRequest request, HttpServletResponse response
     ) throws Exception
     {
+        // Authentication
+        ResponseEntity<Object> auth_ret = __doAuth(request, username, auth_hash);
+        if (auth_ret != null)
+            return auth_ret;
+        
         JSONObject resp = new JSONObject();
         resp.put("ok", true);
         resp.put("sharetitle_count", db.numberOfWebsites());
         resp.put("last_update_time", db.lastUpdateTime());
         
-        __logRequestResp("INFO", request, resp);
-        return __genJsonResponse(resp, HttpStatus.OK);
+        Utilities.logRequestResp("INFO", request, resp);
+        return Utilities.genJsonResponse(resp, HttpStatus.OK);
     }
     
     
@@ -90,11 +99,18 @@ public class RestApiController
      * @throws Exception
      */
     @GetMapping(value={"/allsharetitles", "/allsharetitles/{limit}"})
-    public ResponseEntity<String> getAllSharetitles(
+    public ResponseEntity<Object> getAllSharetitles(
         @PathVariable(value="limit", required=false) String limit,
+        @CookieValue(value="username", required=false) String username,
+        @CookieValue(value="auth_hash", required=false) String auth_hash,
         HttpServletRequest request, HttpServletResponse response
     ) throws Exception
     {
+        // Authentication
+        ResponseEntity<Object> auth_ret = __doAuth(request, username, auth_hash);
+        if (auth_ret != null)
+            return auth_ret;
+        
         // generate sharetitle array
         int intlimit = -1;
         try
@@ -107,8 +123,8 @@ public class RestApiController
             JSONObject resp = new JSONObject();
             resp.put("ok", false);
             resp.put("error", "Invalid limit input, not an integer.");
-            __logRequestResp("WARN", request, resp);
-            return __genJsonResponse(resp, HttpStatus.BAD_REQUEST);
+            Utilities.logRequestResp("WARN", request, resp);
+            return Utilities.genJsonResponse(resp, HttpStatus.BAD_REQUEST);
         }
         JSONArray sharetitle = new JSONArray();
         ArrayList<WebsiteModel> websites = db.getAllWebsites();
@@ -125,8 +141,8 @@ public class RestApiController
         resp.put("sharetitles", sharetitle);
         
         
-        __logRequestResp("INFO", request, resp);
-        return __genJsonResponse(resp, HttpStatus.OK);
+        Utilities.logRequestResp("INFO", request, resp);
+        return Utilities.genJsonResponse(resp, HttpStatus.OK);
     }
     
     
@@ -151,11 +167,18 @@ public class RestApiController
      * @throws Exception
      */
     @GetMapping(value={"/sharetitle/{id}"})
-    public ResponseEntity<String> getSharetitle(
+    public ResponseEntity<Object> getSharetitle(
         @PathVariable(value="id") String id,
+        @CookieValue(value="username", required=false) String username,
+        @CookieValue(value="auth_hash", required=false) String auth_hash,
         HttpServletRequest request, HttpServletResponse response
     ) throws Exception
     {
+        // Authentication
+        ResponseEntity<Object> auth_ret = __doAuth(request, username, auth_hash);
+        if (auth_ret != null)
+            return auth_ret;
+        
         int int_id = -1;
         try
         {
@@ -166,9 +189,9 @@ public class RestApiController
             JSONObject resp = new JSONObject();
             resp.put("ok", false);
             resp.put("error", "Input id must be an integer.");
-            __logRequestResp("WARN", request, resp);
+            Utilities.logRequestResp("WARN", request, resp);
             
-            return __genJsonResponse(resp, HttpStatus.BAD_REQUEST);
+            return Utilities.genJsonResponse(resp, HttpStatus.BAD_REQUEST);
         }
         
         WebsiteModel website = db.getWebsite(int_id);
@@ -179,17 +202,17 @@ public class RestApiController
             status = HttpStatus.BAD_REQUEST;
             resp.put("ok", false);
             resp.put("error", "Input id does not exists.");
-            __logRequestResp("WARN", request, resp);
+            Utilities.logRequestResp("WARN", request, resp);
         }
         else
         {
             status = HttpStatus.OK;
             resp.put("ok", true);
             resp.put("sharetitle", website.toJson());
-            __logRequestResp("INFO", request, resp);
+            Utilities.logRequestResp("INFO", request, resp);
         }
         
-        return __genJsonResponse(resp, status);
+        return Utilities.genJsonResponse(resp, status);
     }
     
     
@@ -215,58 +238,63 @@ public class RestApiController
      * @throws Exception
      */
     @PostMapping(value="/sharetitle", headers="Content-Type=text/plain")
-    public ResponseEntity<String> postSharetitle(
+    public ResponseEntity<Object> postSharetitle(
         @RequestBody String data,
+        @CookieValue(value="username", required=false) String username,
+        @CookieValue(value="auth_hash", required=false) String auth_hash,
         HttpServletRequest request, HttpServletResponse response
     ) throws Exception
     {
+        // Authentication
+        ResponseEntity<Object> auth_ret = __doAuth(request, username, auth_hash);
+        if (auth_ret != null)
+            return auth_ret;
+        
         JSONObject resp = new JSONObject();
         WebsiteModel entry = db.addWebsite(data);
         resp.put("ok", (entry != null));
         resp.put("sharetitle", entry.toJson());
         
-        __logRequestResp("INFO", request, resp);
-        return __genJsonResponse(resp, HttpStatus.OK);
+        Utilities.logRequestResp("INFO", request, resp);
+        return Utilities.genJsonResponse(resp, HttpStatus.OK);
     }
     
     
     // private helper function
-    private ResponseEntity<String> __genJsonResponse(JSONObject response, HttpStatus status)
+    private ResponseEntity<Object> __doAuth(
+        HttpServletRequest request,
+        String username, String auth_hash
+    ) throws Exception
     {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/json");
-        return new ResponseEntity<String>(response.toString(), headers, status);
-    }
-    
-    private void __logRequestResp(String logLevel, HttpServletRequest request, JSONObject resp)
-    {
-        switch (logLevel.toUpperCase())
+        ResponseEntity<Object> ret = null;
+        try
         {
-        case "TRACE":
-            MyLogger.trace("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
-            MyLogger.trace("Response data: {}", resp.toString());
-            break;
-        case "DEBUG":
-            MyLogger.debug("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
-            MyLogger.debug("Response data: {}", resp.toString());
-            break;
-        case "INFO":
-            MyLogger.info("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
-            MyLogger.info("Response data: {}", resp.toString());
-            break;
-        case "WARN":
-            MyLogger.warn("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
-            MyLogger.warn("{}", resp.getString("error"));
-            break;
-        case "ERROR":
-            MyLogger.error("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
-            MyLogger.error("{}", resp.getString("error"));
-            break;
-        default:
-            MyLogger.info("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
-            MyLogger.info("Response data: {}", resp.toString());
-            break;
+            // missing cookie
+            if (AuthManager.isAuthRequired() && (username == null || auth_hash == null))
+            {
+                JSONObject resp = new JSONObject();
+                resp.put("ok", false);
+                resp.put("error", "Missing Authentication Cookie");
+                
+                Utilities.logRequestResp("WARN", request, resp);
+                return Utilities.genJsonResponse(resp, HttpStatus.BAD_REQUEST);
+            }
+            // auth failed
+            else if (AuthManager.isAuthRequired() && !AuthManager.auth(username, auth_hash))
+            {
+                JSONObject resp = new JSONObject();
+                resp.put("ok", false);
+                resp.put("error", "Invalid Authentication");
+                Utilities.logRequestResp("WARN", request, resp);
+                ret = Utilities.genJsonResponse(resp, HttpStatus.BAD_REQUEST);
+            }
         }
+        catch (Exception e)
+        {
+            MyLogger.error("Exception during auth: {}", e.getMessage());
+            throw e;
+        }
+        return ret;
     }
     
     

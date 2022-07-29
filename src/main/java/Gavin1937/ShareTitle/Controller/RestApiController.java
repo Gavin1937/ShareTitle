@@ -100,7 +100,7 @@ public class RestApiController
      */
     @GetMapping(value={"/allsharetitles", "/allsharetitles/{limit}"})
     public ResponseEntity<Object> getAllSharetitles(
-        @PathVariable(value="limit", required=false) String limit,
+        @PathVariable(value="limit", required=false) int limit,
         @CookieValue(value="username", required=false) String username,
         @CookieValue(value="auth_hash", required=false) String auth_hash,
         HttpServletRequest request, HttpServletResponse response
@@ -111,35 +111,20 @@ public class RestApiController
         if (auth_ret != null)
             return auth_ret;
         
-        // generate sharetitle array
-        int intlimit = -1;
-        try
-        {
-            if (limit != null && !limit.isEmpty())
-                intlimit = Integer.valueOf(limit);
-        }
-        catch (Exception e)
-        {
-            JSONObject resp = new JSONObject();
-            resp.put("ok", false);
-            resp.put("error", "Invalid limit input, not an integer.");
-            Utilities.logRequestResp("WARN", request, resp);
-            return Utilities.genJsonResponse(resp, HttpStatus.BAD_REQUEST);
-        }
+        // generate response
         JSONArray sharetitle = new JSONArray();
         ArrayList<WebsiteModel> websites = db.getAllWebsites();
         for (int idx = 0; idx < websites.size(); ++idx)
         {
-            if (intlimit == 0)
+            if (limit == 0)
                 break;
             sharetitle.put(websites.get(idx).toJson());
-            intlimit--;
+            limit--;
         }
         JSONObject resp = new JSONObject();
         resp.put("ok", (sharetitle.length() >= 0));
         resp.put("length", sharetitle.length());
         resp.put("sharetitles", sharetitle);
-        
         
         Utilities.logRequestResp("INFO", request, resp);
         return Utilities.genJsonResponse(resp, HttpStatus.OK);
@@ -168,7 +153,7 @@ public class RestApiController
      */
     @GetMapping(value={"/sharetitle/{id}"})
     public ResponseEntity<Object> getSharetitle(
-        @PathVariable(value="id") String id,
+        @PathVariable(value="id") int id,
         @CookieValue(value="username", required=false) String username,
         @CookieValue(value="auth_hash", required=false) String auth_hash,
         HttpServletRequest request, HttpServletResponse response
@@ -179,22 +164,8 @@ public class RestApiController
         if (auth_ret != null)
             return auth_ret;
         
-        int int_id = -1;
-        try
-        {
-            int_id = Integer.parseInt(id);
-        }
-        catch (Exception e)
-        {
-            JSONObject resp = new JSONObject();
-            resp.put("ok", false);
-            resp.put("error", "Input id must be an integer.");
-            Utilities.logRequestResp("WARN", request, resp);
-            
-            return Utilities.genJsonResponse(resp, HttpStatus.BAD_REQUEST);
-        }
-        
-        WebsiteModel website = db.getWebsite(int_id);
+        // generate response
+        WebsiteModel website = db.getWebsite(id);
         HttpStatus status = HttpStatus.OK;
         JSONObject resp = new JSONObject();
         if (website == null)
@@ -239,7 +210,7 @@ public class RestApiController
      */
     @PostMapping(value="/sharetitle", headers="Content-Type=text/plain")
     public ResponseEntity<Object> postSharetitle(
-        @RequestBody String data,
+        @RequestBody(required=false) String data,
         @CookieValue(value="username", required=false) String username,
         @CookieValue(value="auth_hash", required=false) String auth_hash,
         HttpServletRequest request, HttpServletResponse response
@@ -250,9 +221,28 @@ public class RestApiController
         if (auth_ret != null)
             return auth_ret;
         
+        // handle bad input data
+        if (data == null || data.strip().isEmpty())
+        {
+            JSONObject resp = new JSONObject();
+            resp.put("ok", false);
+            resp.put("error", "Input text cannot be empty");
+            
+            Utilities.logRequestResp("WARN", request, resp);
+            return Utilities.genJsonResponse(resp, HttpStatus.BAD_REQUEST);
+        }
+        
+        // generate response
         JSONObject resp = new JSONObject();
-        WebsiteModel entry = db.addWebsite(data);
-        resp.put("ok", (entry != null));
+        WebsiteModel entry = db.addWebsite(data.strip());
+        if (entry == null)
+        {
+            resp.put("ok", false);
+            resp.put("error", "Cannot parse input text");
+            Utilities.logRequestResp("WARN", request, resp);
+            return Utilities.genJsonResponse(resp, HttpStatus.BAD_REQUEST);
+        }
+        resp.put("ok", true);
         resp.put("sharetitle", entry.toJson());
         
         Utilities.logRequestResp("INFO", request, resp);

@@ -3,10 +3,6 @@ package Gavin1937.ShareTitle.Controller;
 // Exceptions
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
-import org.springframework.web.bind.ServletRequestBindingException;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.multipart.support.MissingServletRequestPartException;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -72,4 +68,5 @@ public class RestApiExceptionHandler extends ResponseEntityExceptionHandler
     // to handle missing header/cookie parameter exceptions
 }
 
+// for debug
 // public class RestApiExceptionHandler {}

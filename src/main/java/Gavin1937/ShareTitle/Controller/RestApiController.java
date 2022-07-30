@@ -74,10 +74,6 @@ public class RestApiController
     /**
      * GET all sharetitles from database
      * 
-     * @param
-     *  limit => [Optional] int limiting how many sharetitle returns.
-     *  If supplied, this function will limit the "sharetitle" output.
-     *  Otherwise function will return all the sharetitle
      * @return response json string:
      * {
      *  "sharetitles": [
@@ -98,9 +94,68 @@ public class RestApiController
      *  
      * @throws Exception
      */
-    @GetMapping(value={"/allsharetitles", "/allsharetitles/{limit}"})
+    @GetMapping(value="/allsharetitles")
     public ResponseEntity<Object> getAllSharetitles(
-        @PathVariable(value="limit", required=false) int limit,
+        @CookieValue(value="username", required=false) String username,
+        @CookieValue(value="auth_hash", required=false) String auth_hash,
+        HttpServletRequest request, HttpServletResponse response
+    ) throws Exception
+    {
+        // Authentication
+        ResponseEntity<Object> auth_ret = __doAuth(request, username, auth_hash);
+        if (auth_ret != null)
+            return auth_ret;
+        
+        // generate response
+        JSONArray sharetitle = new JSONArray();
+        int limit = -1;
+        ArrayList<WebsiteModel> websites = db.getAllWebsites();
+        for (int idx = 0; idx < websites.size(); ++idx)
+        {
+            if (limit == 0)
+                break;
+            sharetitle.put(websites.get(idx).toJson());
+            limit--;
+        }
+        JSONObject resp = new JSONObject();
+        resp.put("ok", (sharetitle.length() >= 0));
+        resp.put("length", sharetitle.length());
+        resp.put("sharetitles", sharetitle);
+        
+        Utilities.logRequestResp("INFO", request, resp);
+        return Utilities.genJsonResponse(resp, HttpStatus.OK);
+    }
+    
+    
+    /**
+     * GET all sharetitles from database with limit
+     * 
+     * @param
+     *  limit => int limiting how many sharetitle returns.
+     *  If limit is negative numbber, return all sharetitles. (same as getAllSharetitles())
+     * @return response json string:
+     * {
+     *  "sharetitles": [
+     *   {
+     *    "id": id,
+     *    "title": string,
+     *    "url": string,
+     *    "domain": string,
+     *    "parent_child": int,
+     *    "is_visited": int,
+     *    "time": int (timestamp)
+     *   },
+     *   ...
+     *  ],
+     *  "length": int,
+     *  "ok": boolean
+     * }
+     *  
+     * @throws Exception
+     */
+    @GetMapping(value="/allsharetitles/{limit}")
+    public ResponseEntity<Object> getAllSharetitlesWithLimit(
+        @PathVariable(value="limit") int limit,
         @CookieValue(value="username", required=false) String username,
         @CookieValue(value="auth_hash", required=false) String auth_hash,
         HttpServletRequest request, HttpServletResponse response

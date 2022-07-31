@@ -42,6 +42,7 @@
                 <th scope="col">link</th>
                 <th scope="col">visitStatus</th>
                 <th scope="col">Time (UTC)</th>
+                <th scope="col">Delete</th>
             </tr>
             
             <c:forEach items="${websites}" var="website">
@@ -56,6 +57,7 @@
                     </th>
                     <th class="time" time="${website.time}"></th>
                     <script>beautifyRow("${website.id}");</script>
+                    <th><input type="button" onclick='deleteSharetitle("${website.id}")' value="delete"/></th>
                 </tr>
             </c:forEach>
             

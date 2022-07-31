@@ -75,7 +75,7 @@ function toggleVisited(id)
         if (xhr.readyState == XMLHttpRequest.DONE) {
             
             var jresp = JSON.parse(responseText.target.response);
-            var vs_th = document.getElementById(id).querySelector(".visitStatus");
+            var vs_th = document.querySelector(`[id="${jresp.id}"] .visitStatus`);
             var glb_vs_th = globalThis.websiteTableDOM.querySelector(`[id="${id}"] .visitStatus`);
             var filter_mode = parseInt(sessionStorage.getItem("filter_mode"));
             
@@ -201,4 +201,34 @@ function beautifyRow(id)
     var S = String(time.getSeconds()).padStart(2, '0');
     
     time_th.innerHTML = `${y}-${m}-${d} ${H}:${M}:${S}`;
+}
+
+function deleteSharetitle(id)
+{
+    var xhr = new XMLHttpRequest();
+    xhr.open("DELETE", `/api/sharetitle/${id}`, true);
+    
+    // update page after response
+    xhr.onreadystatechange = function(responseText) {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            var jresp = JSON.parse(responseText.target.response);
+            if (xhr.status == 200 && jresp.ok == true) {
+                
+                var vs_th = document.querySelector(`[id="${jresp.id}"] .visitStatus`);
+                var glb_vs_th = globalThis.websiteTableDOM.querySelector(`[id="${jresp.id}"] .visitStatus`);
+                
+                // rm current row in table & update sharetitle count
+                vs_th.parentNode.parentNode.removeChild(vs_th.parentNode);
+                glb_vs_th.parentNode.parentNode.removeChild(glb_vs_th.parentNode);
+                globalThis.filteredWebsiteCount--;
+                var table_title = document.getElementById("table_title");
+                table_title.innerHTML = table_title.innerHTML.replace(/#|\d+/, globalThis.filteredWebsiteCount.toString());
+                
+            } else if (xhr.status == 400 && jresp.ok == false) {
+                alert(jresp.error);
+            }
+        }
+    }
+    
+    xhr.send(data);
 }

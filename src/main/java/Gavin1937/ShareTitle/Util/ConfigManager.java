@@ -56,6 +56,23 @@ public class ConfigManager
         return __config.getString("log_path");
     }
     
+    public Integer getServerPort()
+    {
+        Integer port = -1;
+        try
+        {
+            port = (Integer)__config.getInt("port");
+        }
+        catch (Exception e)
+        {
+            return 8080;
+        }
+        
+        if (port > 0)
+            return port;
+        return 8080;
+    }
+    
     public Level getLogLevel()
     {
         String level = __config.getString("log_level").toUpperCase();

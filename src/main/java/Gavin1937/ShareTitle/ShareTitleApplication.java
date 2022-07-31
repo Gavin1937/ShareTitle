@@ -1,5 +1,7 @@
 package Gavin1937.ShareTitle;
 
+import java.util.Collections;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.boot.SpringApplication;
@@ -41,15 +43,24 @@ public class ShareTitleApplication
         }
         
         
-        MyLogger.info("Finish configuration, starting spring application...");
         MyLogger.trace("Trace msg for testing.");
         MyLogger.debug("Debug msg for testing.");
         MyLogger.info("Info msg for testing.");
         MyLogger.warn("Warn msg for testing.");
         MyLogger.error("Error msg for testing.");
         
-        SpringApplication.run(ShareTitleApplication.class, args);
+        MyLogger.info("Finish configuration, starting spring application...");
+        MyLogger.info("Start Server On Port: [{}]", config.getServerPort());
         
+        
+        SpringApplication app =
+            new SpringApplication(ShareTitleApplication.class);
+        app.setDefaultProperties(
+            Collections.singletonMap(
+                "server.port", config.getServerPort().toString()
+            )
+        );
+        app.run(args);
     }
     
     @PostConstruct

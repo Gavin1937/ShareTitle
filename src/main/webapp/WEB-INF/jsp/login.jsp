@@ -51,7 +51,7 @@
             
             <div class="form-row">
                 <label for="password">password</label>
-                <input id="password" name="password" type="password" onkeyup="return forceLower(this);" />
+                <input id="password" name="password" type="password" />
             </div>
             
             <div class="form-row">

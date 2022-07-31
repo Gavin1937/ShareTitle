@@ -5,6 +5,8 @@ Wants=network-online.target
 After=network-online.target
 
 [Service]
+User=root
+Group=root
 WorkingDirectory=/home/username/ShareTitle
 ExecStart=/usr/bin/java -jar /home/username/ShareTitle/target/ShareTitle.jar /home/username/data/config.json
 

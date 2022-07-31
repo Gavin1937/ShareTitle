@@ -43,13 +43,16 @@ public class WebappController
         
         if (username != null)
             model.addAttribute("username", username);
-        else
+        else if (request.getSession().getAttribute("username") != null)
         {
+            
             model.addAttribute(
                 "username",
                 request.getSession().getAttribute("username")
             );
         }
+        else
+            username = "anonymous";
         
         model.addAttribute("websites", db.getAllWebsites());
         return "showSharetitle";

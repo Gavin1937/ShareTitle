@@ -417,8 +417,18 @@ public class RestApiController
         ResponseEntity<Object> ret = null;
         try
         {
-            // missing cookie
-            if (AuthManager.isAuthRequired() && (username == null || auth_hash == null))
+            String sess_uname = (String)request.getSession().getAttribute("username");
+            String sess_authh = (String)request.getSession().getAttribute("auth_hash");
+            
+            // check cookie or session auth
+            boolean no_session = 
+                (AuthManager.isAuthRequired() && (sess_uname == null || sess_authh == null));
+            boolean no_cookie = 
+                (AuthManager.isAuthRequired() && (username == null || auth_hash == null));
+            boolean auth_res = false;
+            boolean skip_auth = false;
+            
+            if (no_session && no_cookie)
             {
                 JSONObject resp = new JSONObject();
                 resp.put("ok", false);
@@ -427,8 +437,19 @@ public class RestApiController
                 Utilities.logRequestResp("WARN", request, resp);
                 return Utilities.genJsonResponse(resp, HttpStatus.BAD_REQUEST);
             }
-            // auth failed
-            else if (AuthManager.isAuthRequired() && !AuthManager.auth(username, auth_hash))
+            else if (no_session)
+            {
+                skip_auth = false;
+                auth_res = AuthManager.auth(username, auth_hash);
+            }
+            else if (no_cookie)
+            {
+                skip_auth = false;
+                auth_res = AuthManager.auth(sess_uname, sess_authh);
+            }
+            
+            // auth fail
+            if (!auth_res && !skip_auth)
             {
                 JSONObject resp = new JSONObject();
                 resp.put("ok", false);

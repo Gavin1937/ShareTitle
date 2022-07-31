@@ -15,6 +15,18 @@
     
     <div>
         
+        <p style="display:inline-block;">Login as: ${username}</p>
+        <form style="display:inline-block;" action="/logout" method="post">
+            
+            <input type="hidden" name="username" value="${username}" />
+            <input type="submit" value="logout" />
+            
+        </form>
+        
+    </div>
+    
+    <div>
+        
         <p>Share new text</p>
         <form onsubmit="postSharetitle();">
             <input id="data" type="text" />
@@ -25,7 +37,7 @@
     
     <div>
         
-        <p id="table_title">Current Share Titles (Count: #)</p>
+        <p id="table_title" style="margin-bottom: 0px; margin-top: 30px;">Current Share Titles (Count: #)</p>
         <pre style="display:inline-block; font-size:large; font-weight:bold;">filter</pre>
         <select style="display:inline-block;" id="fileter" onchange="filterWebsites()">
             <option value="-1">Show All</option>

@@ -68,7 +68,7 @@ function toggleVisited(id)
     // update visit status
     var xhr = new XMLHttpRequest();
     xhr.open("PUT", `/api/sharetitle/${id}`, true);
-    xhr.send(data);
+    xhr.send();
     
     // update element
     xhr.onreadystatechange = function(responseText) {
@@ -230,5 +230,5 @@ function deleteSharetitle(id)
         }
     }
     
-    xhr.send(data);
+    xhr.send();
 }

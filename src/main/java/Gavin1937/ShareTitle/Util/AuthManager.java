@@ -7,7 +7,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -62,8 +64,8 @@ public class AuthManager
                 FROM auth WHERE username = ?
             ;""";
             PreparedStatement compare = __dbConnection.prepareStatement(sql);
-            compare.setString(1, auth_hash);
-            compare.setString(2, username);
+            compare.setString(1, auth_hash.toLowerCase());
+            compare.setString(2, username.toLowerCase());
             ResultSet rs = compare.executeQuery();
             if (rs.next())
                 ret = rs.getBoolean(1);
@@ -88,6 +90,8 @@ public class AuthManager
         {
             String sql = "INSERT INTO auth VALUES (?, ?);";
             PreparedStatement insert = __dbConnection.prepareStatement(sql);
+            insert.setString(1, auth_hash.toLowerCase());
+            insert.setString(2, username.toLowerCase());
             insert.executeUpdate();
             __updateMtime();
             ret = true;
@@ -114,10 +118,10 @@ public class AuthManager
         if (__requireAuth == false)
             return response;
         
-        Cookie c1 = new Cookie("username", username);
+        Cookie c1 = new Cookie("username", username.toLowerCase());
         c1.setPath("/");
         c1.setMaxAge(__cookieMaxAge);
-        Cookie c2 = new Cookie("auth_hash", auth_hash);
+        Cookie c2 = new Cookie("auth_hash", auth_hash.toLowerCase());
         c2.setPath("/");
         c2.setMaxAge(__cookieMaxAge);
         
@@ -125,6 +129,23 @@ public class AuthManager
         response.addCookie(c2);
         
         return response;
+    }
+    
+    public static HttpServletRequest issueAuthSession(
+        HttpServletRequest request,
+        String username, String auth_hash
+    ) throws Exception
+    {
+        __checkConnection();
+        
+        if (__requireAuth == false)
+            return request;
+        
+        HttpSession session = request.getSession();
+        session.setAttribute("username", username.toLowerCase());
+        session.setAttribute("auth_hash", auth_hash.toLowerCase());
+        
+        return request;
     }
     
     

@@ -237,7 +237,7 @@ public class DbManager
         return id;
     }
     
-    public int setVisited(int id)
+    public int toggleVisited(int id)
         throws Exception
     {
         __checkConnection();
@@ -245,14 +245,22 @@ public class DbManager
         if (!isWebsiteExists(id))
             return -1;
         
+        int ret = -1;
         try
         {
             // set visited
-            String sql = "UPDATE websites SET is_visited = 1 WHERE id = ?;";
+            String sql = "UPDATE websites SET is_visited = NOT is_visited WHERE id = ?;";
             PreparedStatement setvisit = __dbConnection.prepareStatement(sql);
-            
             setvisit.setInt(1, id);
             setvisit.executeUpdate();
+            
+            // get latest is_visited value
+            sql = "SELECT is_visited FROM websites WHERE id = ?;";
+            PreparedStatement getIsVisited = __dbConnection.prepareStatement(sql);
+            getIsVisited.setInt(1, id);
+            ResultSet rs = getIsVisited.executeQuery();
+            if (rs.next())
+                ret = rs.getInt(1);
             
             __updateMtime();
         }
@@ -261,7 +269,7 @@ public class DbManager
             MyLogger.error("SQLException: " + e.getMessage());
             return -1;
         }
-        return id;
+        return ret;
     }
     
     public boolean isWebsiteExists(int id)

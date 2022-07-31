@@ -358,7 +358,7 @@ public class RestApiController
     
     
     /**
-     * PUT set is_visited to a sharetitle in database specified by id
+     * PUT toggle is_visited for a sharetitle in database specified by id
      * 
      * @param
      *  id => integer id exists in database
@@ -366,12 +366,13 @@ public class RestApiController
      * @return response json string:
      * {
      *  "id": int,
+     *  "is_visited": int,
      *  "ok": boolean
      * }
      * @throws Exception
      */
     @PutMapping(value={"/sharetitle/{id}"})
-    public ResponseEntity<Object> putSetVisited(
+    public ResponseEntity<Object> putToggleVisited(
         @PathVariable(value="id") int id,
         @CookieValue(value="username", required=false) String username,
         @CookieValue(value="auth_hash", required=false) String auth_hash,
@@ -384,10 +385,10 @@ public class RestApiController
             return auth_ret;
         
         // generate response
-        int retId = db.setVisited(id);
+        int toggleRes = db.toggleVisited(id);
         HttpStatus status = HttpStatus.OK;
         JSONObject resp = new JSONObject();
-        if (retId == -1)
+        if (toggleRes == -1)
         {
             status = HttpStatus.BAD_REQUEST;
             resp.put("ok", false);
@@ -398,7 +399,8 @@ public class RestApiController
         {
             status = HttpStatus.OK;
             resp.put("ok", true);
-            resp.put("id", retId);
+            resp.put("is_visited", toggleRes);
+            resp.put("id", id);
             Utilities.logRequestResp("INFO", request, resp);
         }
         

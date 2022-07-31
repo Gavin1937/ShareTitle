@@ -6,6 +6,9 @@ import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Cookie;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -99,6 +102,29 @@ public class AuthManager
         }
         
         return ret;
+    }
+    
+    public static HttpServletResponse issueAuthCookie(
+        HttpServletResponse response,
+        String username, String auth_hash
+    ) throws Exception
+    {
+        __checkConnection();
+        
+        if (__requireAuth == false)
+            return response;
+        
+        Cookie c1 = new Cookie("username", username);
+        c1.setPath("/");
+        c1.setMaxAge(__cookieMaxAge);
+        Cookie c2 = new Cookie("auth_hash", auth_hash);
+        c2.setPath("/");
+        c2.setMaxAge(__cookieMaxAge);
+        
+        response.addCookie(c1);
+        response.addCookie(c2);
+        
+        return response;
     }
     
     
@@ -215,4 +241,5 @@ public class AuthManager
     // private members
     private static Connection __dbConnection = null;
     private static boolean __requireAuth = false;
+    private static int __cookieMaxAge = 10*24*3600;
 }

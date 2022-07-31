@@ -215,6 +215,9 @@ public class DbManager
     {
         __checkConnection();
         
+        if (!isWebsiteExists(id))
+            return -1;
+        
         try
         {
             // delete
@@ -232,6 +235,59 @@ public class DbManager
             return -1;
         }
         return id;
+    }
+    
+    public int setVisited(int id)
+        throws Exception
+    {
+        __checkConnection();
+        
+        if (!isWebsiteExists(id))
+            return -1;
+        
+        try
+        {
+            // set visited
+            String sql = "UPDATE websites SET is_visited = 1 WHERE id = ?;";
+            PreparedStatement setvisit = __dbConnection.prepareStatement(sql);
+            
+            setvisit.setInt(1, id);
+            setvisit.executeUpdate();
+            
+            __updateMtime();
+        }
+        catch (SQLException e)
+        {
+            MyLogger.error("SQLException: " + e.getMessage());
+            return -1;
+        }
+        return id;
+    }
+    
+    public boolean isWebsiteExists(int id)
+        throws Exception
+    {
+        __checkConnection();
+        
+        boolean ret = false;
+        try
+        {
+            // set visited
+            String sql = "SELECT * FROM websites WHERE id = ?;";
+            PreparedStatement checkexists = __dbConnection.prepareStatement(sql);
+            
+            checkexists.setInt(1, id);
+            ResultSet rs = checkexists.executeQuery();
+            ret = rs.next();
+            
+            __updateMtime();
+        }
+        catch (SQLException e)
+        {
+            MyLogger.error("SQLException: " + e.getMessage());
+            return false;
+        }
+        return ret;
     }
     
     public void resetLastInsert()

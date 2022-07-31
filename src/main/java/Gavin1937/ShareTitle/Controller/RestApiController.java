@@ -11,10 +11,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import Gavin1937.ShareTitle.Model.WebsiteModel;
@@ -187,6 +189,7 @@ public class RestApiController
     
     
     /**
+     * GET sharetitle form database specified by id
      * 
      * @param
      *  id => integer id exists in database
@@ -302,6 +305,104 @@ public class RestApiController
         
         Utilities.logRequestResp("INFO", request, resp);
         return Utilities.genJsonResponse(resp, HttpStatus.OK);
+    }
+    
+    
+    /**
+     * DELETE sharetitle from database specified by id
+     * 
+     * @param
+     *  id => integer id exists in database
+     *  
+     * @return response json string:
+     * {
+     *  "id": int,
+     *  "ok": boolean
+     * }
+     * @throws Exception
+     */
+    @DeleteMapping(value={"/sharetitle/{id}"})
+    public ResponseEntity<Object> deleteSharetitle(
+        @PathVariable(value="id") int id,
+        @CookieValue(value="username", required=false) String username,
+        @CookieValue(value="auth_hash", required=false) String auth_hash,
+        HttpServletRequest request, HttpServletResponse response
+    ) throws Exception
+    {
+        // Authentication
+        ResponseEntity<Object> auth_ret = __doAuth(request, username, auth_hash);
+        if (auth_ret != null)
+            return auth_ret;
+        
+        // generate response
+        int retId = db.deleteWebsite(id);
+        HttpStatus status = HttpStatus.OK;
+        JSONObject resp = new JSONObject();
+        if (retId == -1)
+        {
+            status = HttpStatus.BAD_REQUEST;
+            resp.put("ok", false);
+            resp.put("error", "Input id does not exists.");
+            Utilities.logRequestResp("WARN", request, resp);
+        }
+        else
+        {
+            status = HttpStatus.OK;
+            resp.put("ok", true);
+            resp.put("id", retId);
+            Utilities.logRequestResp("INFO", request, resp);
+        }
+        
+        return Utilities.genJsonResponse(resp, status);
+    }
+    
+    
+    /**
+     * PUT set is_visited to a sharetitle in database specified by id
+     * 
+     * @param
+     *  id => integer id exists in database
+     *  
+     * @return response json string:
+     * {
+     *  "id": int,
+     *  "ok": boolean
+     * }
+     * @throws Exception
+     */
+    @PutMapping(value={"/sharetitle/{id}"})
+    public ResponseEntity<Object> putSetVisited(
+        @PathVariable(value="id") int id,
+        @CookieValue(value="username", required=false) String username,
+        @CookieValue(value="auth_hash", required=false) String auth_hash,
+        HttpServletRequest request, HttpServletResponse response
+    ) throws Exception
+    {
+        // Authentication
+        ResponseEntity<Object> auth_ret = __doAuth(request, username, auth_hash);
+        if (auth_ret != null)
+            return auth_ret;
+        
+        // generate response
+        int retId = db.setVisited(id);
+        HttpStatus status = HttpStatus.OK;
+        JSONObject resp = new JSONObject();
+        if (retId == -1)
+        {
+            status = HttpStatus.BAD_REQUEST;
+            resp.put("ok", false);
+            resp.put("error", "Input id does not exists.");
+            Utilities.logRequestResp("WARN", request, resp);
+        }
+        else
+        {
+            status = HttpStatus.OK;
+            resp.put("ok", true);
+            resp.put("id", retId);
+            Utilities.logRequestResp("INFO", request, resp);
+        }
+        
+        return Utilities.genJsonResponse(resp, status);
     }
     
     

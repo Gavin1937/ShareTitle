@@ -1,0 +1,8 @@
+
+{
+    "database_path": ":memory:",
+    "title_parse_script": "C:\\Users\\gyh18\\Dev\\ShareTitle\\ShareTitle\\parseScript.json",
+    "log_path": "C:\\Users\\gyh18\\Dev\\ShareTitle\\ShareTitle\\test.log",
+    "log_level": "debug"
+}
+

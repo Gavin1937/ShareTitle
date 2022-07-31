@@ -37,3 +37,6 @@ build/
 *.sqlite
 *.db
 *.log
+
+### whitelist ###
+!test_config.json

@@ -133,7 +133,11 @@ public class WebappController
         String username, String auth_hash
     ) throws Exception
     {
+        // skip auth
         String ret = null;
+        if (!AuthManager.isAuthRequired())
+            return ret;
+        
         try
         {
             String sess_uname = (String)request.getSession().getAttribute("username");

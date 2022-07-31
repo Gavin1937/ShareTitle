@@ -414,7 +414,11 @@ public class RestApiController
         String username, String auth_hash
     ) throws Exception
     {
+        // skip auth
         ResponseEntity<Object> ret = null;
+        if (!AuthManager.isAuthRequired())
+            return ret;
+        
         try
         {
             String sess_uname = (String)request.getSession().getAttribute("username");

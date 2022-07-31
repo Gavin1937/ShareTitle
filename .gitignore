@@ -40,3 +40,4 @@ build/
 
 ### whitelist ###
 !test_config.json
+!parseScript.json

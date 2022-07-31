@@ -1,0 +1,73 @@
+
+[
+	{
+		"domain": "pixiv",
+		"regex": "^(.*pixiv) - (http.*pixiv.*users.*)$",
+		"parent_child": 0
+	},
+	{
+		"domain": "pixiv",
+		"regex": "^(.*pixiv) - (http.*pixiv.*artworks.*)$",
+		"parent_child": 1
+	},
+	{
+		"domain": "twitter",
+		"regex": "^(.*Twitter) - (?!http.*twitter.*status.*)(http.*twitter.*(?!status).*)$",
+		"parent_child": 0
+	},
+	{
+		"domain": "twitter",
+		"regex": "^(.*Twitter) - (http.*twitter.*status.*)$",
+		"parent_child": 1
+	},
+	{
+		"domain": "danbooru",
+		"regex": "^(.* Danbooru) - (?!http.*danbooru.*posts/\\d+)(http.*danbooru.*)$",
+		"parent_child": 0
+	},
+	{
+		"domain": "danbooru",
+		"regex": "^(.* Danbooru) - (http.*danbooru.*posts/\\d+)$",
+		"parent_child": 1
+	},
+	{
+		"domain": "yandere",
+		"regex": "^(.*) - (?!http.*yande\\.re.*post/show/\\d+.*)(http.*yande\\.re.*)$",
+		"parent_child": 0
+	},
+	{
+		"domain": "yandere",
+		"regex": "^(.*) - (http.*yande\\.re.*post/show/\\d+.*)$",
+		"parent_child": 1
+	},
+	{
+		"domain": "konachan",
+		"regex": "^(.*) - (http.*konachan.*post\\?tag.*)$",
+		"parent_child": 0
+	},
+	{
+		"domain": "konachan",
+		"regex": "^(.*) - (http.*konachan.*post/show/\\d+.*)$",
+		"parent_child": 1
+	},
+	{
+		"domain": "weibo",
+		"regex": "^(.*微博) - (?!http.*weibo.*status.*)(http.*weibo.*)$",
+		"parent_child": 0
+	},
+	{
+		"domain": "weibo",
+		"regex": "^(.*微博) - (http.*weibo.*status)$",
+		"parent_child": 1
+	},
+	{
+		"domain": "ehentai",
+		"regex": "^(.*) - (?!http.*e-hentai.*/s/.*)(http.*e-hentai.*)$",
+		"parent_child": 0
+	},
+	{
+		"domain": "ehentai",
+		"regex": "^(.*) - (http.*e-hentai.*/s/.*)$",
+		"parent_child": 1
+	},
+]

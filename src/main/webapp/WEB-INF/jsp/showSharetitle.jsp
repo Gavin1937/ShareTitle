@@ -16,12 +16,14 @@
     <div>
         
         <p style="display:inline-block;">Login as: ${username}</p>
-        <form style="display:inline-block;" action="/logout" method="post">
-            
-            <input type="hidden" name="username" value="${username}" />
-            <input type="submit" value="logout" />
-            
-        </form>
+        <c:if test='${username != "anonymous"}'>
+            <form style="display:inline-block;" action="/logout" method="post">
+                
+                <input type="hidden" name="username" value="${username}" />
+                <input type="submit" value="logout" />
+                
+            </form>
+        </c:if>
         
     </div>
     

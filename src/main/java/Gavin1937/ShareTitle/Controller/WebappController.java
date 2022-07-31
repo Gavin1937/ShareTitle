@@ -41,18 +41,17 @@ public class WebappController
         if (auth_ret != null)
             return auth_ret;
         
+        String sess_uname = (String)request.getSession().getAttribute("username");
         if (username != null)
             model.addAttribute("username", username);
-        else if (request.getSession().getAttribute("username") != null)
-        {
-            
-            model.addAttribute(
-                "username",
-                request.getSession().getAttribute("username")
-            );
-        }
+        else if (sess_uname != null)
+            model.addAttribute("username", sess_uname);
         else
-            username = "anonymous";
+        {
+            model.addAttribute("username", "anonymous");
+            MyLogger.info("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
+            MyLogger.info("Login as anonymous user");
+        }
         
         model.addAttribute("websites", db.getAllWebsites());
         return "showSharetitle";

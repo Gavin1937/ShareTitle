@@ -1,0 +1,12 @@
+
+[Unit]
+Description="Share title & url to custom server"
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+WorkingDirectory=/home/username/ShareTitle
+ExecStart=/usr/bin/java -jar /home/username/ShareTitle/target/ShareTitle.jar /home/username/data/config.json
+
+[Install]
+WantedBy=default.target

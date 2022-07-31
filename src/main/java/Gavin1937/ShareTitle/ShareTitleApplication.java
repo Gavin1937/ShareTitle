@@ -16,10 +16,6 @@ import Gavin1937.ShareTitle.Util.TitleParser;
 public class ShareTitleApplication
 {
     
-    private static ConfigManager config = ConfigManager.getInstance();
-    private static DbManager db = DbManager.getInstance();
-    
-    
     public static void main(String[] args)
     {
         // init config, db, & logger
@@ -61,5 +57,10 @@ public class ShareTitleApplication
     {
         MyLogger.init(config.getLogPath(), config.getLogLevel());
     }
+    
+    
+    // private members
+    private static ConfigManager config = ConfigManager.getInstance();
+    private static DbManager db = DbManager.getInstance();
     
 }

@@ -1,0 +1,15 @@
+
+.title {
+    font-weight: bolder;
+    font-size: large;
+}
+.subtitle {
+    font-weight: bold;
+    font-size: medium;
+}
+.form-row {
+    float:left;
+    clear:both;
+    margin-top:5px;
+    margin-bottom:5px;
+}

@@ -8,22 +8,7 @@
     <title>Login</title>
 </head>
 
-<style>
-    .title {
-        font-weight: bolder;
-        font-size: large;
-    }
-    .subtitle {
-        font-weight: bold;
-        font-size: medium;
-    }
-    .form-row {
-        float:left;
-        clear:both;
-        margin-top:5px;
-        margin-bottom:5px;
-    }
-</style>
+<link href="css/login.css" rel="stylesheet">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/md5.js"></script>

@@ -1,9 +1,5 @@
-#! /bin/bash
+#! /bin/bash +x
 
-./mvnw package
-
-mkdir -p target/dependency
-
-(cd target/dependency; jar -xf ../*.jar)
+./mvnw clean package
 
 docker build -t gavin1937/sharetitle:latest .

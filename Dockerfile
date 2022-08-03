@@ -1,10 +1,13 @@
 
 FROM openjdk:17-alpine
 
-ARG DEPENDENCY=target/dependency
-COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
-COPY ${DEPENDENCY}/META-INF /app/META-INF
-COPY ${DEPENDENCY}/BOOT-INF/classes /app
+RUN mkdir -p /app/src/main/webapp && \
+	mkdir -p /app/target && \
+	mkdir -p /app/data
 
-ENTRYPOINT ["java","-cp","app:app/lib/*","Gavin1937.ShareTitle.ShareTitleApplication"]
+COPY pom.xml /app
+COPY src/main/webapp /app/src/main/webapp
+COPY target/ShareTitle.jar /app/target
 
+WORKDIR /app
+ENTRYPOINT ["java","-jar","target/ShareTitle.jar"]

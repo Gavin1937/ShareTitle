@@ -38,6 +38,9 @@ build/
 *.db
 *.log
 
+### folders ###
+/data/
+
 ### whitelist ###
 !test_config.json
 !parseScript.json

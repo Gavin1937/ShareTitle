@@ -5,6 +5,7 @@
     "database_path": ":memory:",
     "title_parse_script": "./parseScript.json",
     "log_path": "./test.log",
-    "log_level": "debug"
+    "log_level": "debug",
+    "port": 8080
 }
 

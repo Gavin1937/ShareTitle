@@ -1,6 +1,6 @@
 
 {
-    "require_auth": false,
+    "require_auth": true,
     "auth_database_path": "/app/data/sharetitle_auth.sqlite",
     "database_path": "/app/data/sharetitle.sqlite",
     "title_parse_script": "/app/data/parseScript.json",

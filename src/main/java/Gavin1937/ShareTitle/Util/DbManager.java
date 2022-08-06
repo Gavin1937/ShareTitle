@@ -126,6 +126,24 @@ public class DbManager
         return ret;
     }
     
+    /**
+     * 
+     * @param is_visit => int setting value of "is_visited" field.
+     *  <ul>
+     *  <li>If set to 1, query all sharetitles w/ "is_visited" = 1.</li>
+     *  <li>If set to 0, query all sharetitles w/ "is_visited" = 0.</li>
+     *  <li>Otherwise query all sharetitles.</li>
+     *  </ul>
+     *  
+     * @param reverse => int setting order of return sharetitles.
+     *  <ul>
+     *  <li>If set to 1, order in ascending order by id.</li>
+     *  <li>If set to 0, order in descending order by id.</li>
+     *  </ul>
+     *  
+     * @return
+     * @throws Exception
+     */
     public ArrayList<WebsiteModel> getAllWebsites(int is_visit, int reverse)
         throws Exception
     {

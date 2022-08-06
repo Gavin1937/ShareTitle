@@ -53,7 +53,7 @@ public class WebappController
             MyLogger.info("Login as anonymous user");
         }
         
-        model.addAttribute("websites", db.getAllWebsites());
+        model.addAttribute("websites", db.getAllWebsites(-1, 1));
         return "showSharetitle";
     }
     
@@ -128,6 +128,32 @@ public class WebappController
         
         return "redirect:/login";
     }
+    
+    // Register function is disabled for my use case.
+    // Uncomment this function for your case.
+    /*
+    @PostMapping(value="/register")
+    public String postRegister(
+        @RequestParam(value="username") String username,
+        @RequestParam(value="auth_hash") String auth_hash,
+        HttpServletRequest request, HttpServletResponse response
+    ) throws Exception
+    {
+        if (!AuthManager.isAuthRequired())
+            return "redirect:/login";
+        
+        if (AuthManager.register(username, auth_hash))
+        {
+            MyLogger.info("New user register: {}", username);
+            return "redirect:/login";
+        }
+        else // fail to register, probably due to username duplication.
+        {
+            MyLogger.warn("Fail to register user ({}) due to username duplication", username);
+            return "redirect:/login";
+        }
+    }
+    */
     
     // private helper function
     private String __doAuth(

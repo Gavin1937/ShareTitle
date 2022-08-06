@@ -82,9 +82,9 @@ public class RestApiController
      * @param
      *  is_visit => int request parameter setting value of "is_visited" field.
      *  <ul>
-     *  <li>If set to 1, query all sharetitle w/ "is_visited" = 1.</li>
-     *  <li>If set to 0, query all sharetitle w/ "is_visited" = 0.</li>
-     *  <li>Otherwise query all sharetitle.</li>
+     *  <li>If set to 1, query all sharetitles w/ "is_visited" = 1.</li>
+     *  <li>If set to 0, query all sharetitles w/ "is_visited" = 0.</li>
+     *  <li>Otherwise query all sharetitles.</li>
      *  <li>Default = -1 (query all).</li>
      *  </ul>
      *  
@@ -93,7 +93,7 @@ public class RestApiController
      *  <ul>
      *  <li>If set to 1, order in ascending order by id.</li>
      *  <li>If set to 0, order in descending order by id.</li>
-     *  <li>Default = 0 (ascending order).</li>
+     *  <li>Default = 1 (ascending order).</li>
      *  </ul>
      *  
      * @return response json string:
@@ -165,9 +165,9 @@ public class RestApiController
      * @param
      *  is_visit => int request parameter setting value of "is_visited" field.
      *  <ul>
-     *  <li>If set to 1, query all sharetitle w/ "is_visited" = 1.</li>
-     *  <li>If set to 0, query all sharetitle w/ "is_visited" = 0.</li>
-     *  <li>Otherwise query all sharetitle.</li>
+     *  <li>If set to 1, query all sharetitles w/ "is_visited" = 1.</li>
+     *  <li>If set to 0, query all sharetitles w/ "is_visited" = 0.</li>
+     *  <li>Otherwise query all sharetitles.</li>
      *  <li>Default = -1 (query all).</li>
      *  </ul>
      *  
@@ -176,7 +176,7 @@ public class RestApiController
      *  <ul>
      *  <li>If set to 1, order in ascending order by id.</li>
      *  <li>If set to 0, order in descending order by id.</li>
-     *  <li>Default = 0 (ascending order).</li>
+     *  <li>Default = 1 (ascending order).</li>
      *  </ul>
      *  
      * @return response json string:

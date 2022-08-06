@@ -80,6 +80,9 @@ public class AuthManager
         return ret;
     }
     
+    // Register function is disabled for my use case.
+    // Uncomment this function for your case.
+    /*
     public static boolean register(String username, String auth_hash)
         throws Exception
     {
@@ -109,6 +112,7 @@ public class AuthManager
         
         return ret;
     }
+    */
     
     public static HttpServletResponse issueAuthCookie(
         HttpServletResponse response,

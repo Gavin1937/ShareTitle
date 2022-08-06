@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -100,6 +101,8 @@ public class RestApiController
     public ResponseEntity<Object> getAllSharetitles(
         @CookieValue(value="username", required=false) String username,
         @CookieValue(value="auth_hash", required=false) String auth_hash,
+        @RequestParam(value="is_visit", defaultValue="-1") int is_visit,
+        @RequestParam(value="reverse", defaultValue="0") int reverse,
         HttpServletRequest request, HttpServletResponse response
     ) throws Exception
     {
@@ -111,7 +114,7 @@ public class RestApiController
         // generate response
         JSONArray sharetitle = new JSONArray();
         int limit = -1;
-        ArrayList<WebsiteModel> websites = db.getAllWebsites();
+        ArrayList<WebsiteModel> websites = db.getAllWebsites(is_visit, reverse);
         for (int idx = 0; idx < websites.size(); ++idx)
         {
             if (limit == 0)
@@ -134,8 +137,29 @@ public class RestApiController
      * 
      * @param
      *  limit => int limiting how many sharetitle returns.
-     *  If limit is negative numbber, return all sharetitles. (same as getAllSharetitles())
+     *  <ul>
+     *  <li>If limit is negative numbber, return all sharetitles. (same as getAllSharetitles())</li>
+     *  </ul>
+     *  
+     * @param
+     *  is_visit => int request parameter setting value of "is_visited" field.
+     *  <ul>
+     *  <li>If set to 1, query all sharetitle w/ "is_visited" = 1.</li>
+     *  <li>If set to 0, query all sharetitle w/ "is_visited" = 0.</li>
+     *  <li>Otherwise query all sharetitle.</li>
+     *  <li>Default = -1 (query all).</li>
+     *  </ul>
+     *  
+     * @param
+     *  reverse => int request parameter setting order of return sharetitles.
+     *  <ul>
+     *  <li>If set to 1, order in ascending order by id.</li>
+     *  <li>If set to 0, order in descending order by id.</li>
+     *  <li>Default = 0 (ascending order).</li>
+     *  </ul>
+     *  
      * @return response json string:
+     * <code>
      * {
      *  "sharetitles": [
      *   {
@@ -152,6 +176,7 @@ public class RestApiController
      *  "length": int,
      *  "ok": boolean
      * }
+     * </code>
      *  
      * @throws Exception
      */
@@ -160,6 +185,8 @@ public class RestApiController
         @PathVariable(value="limit") int limit,
         @CookieValue(value="username", required=false) String username,
         @CookieValue(value="auth_hash", required=false) String auth_hash,
+        @RequestParam(value="is_visit", defaultValue="-1") int is_visit,
+        @RequestParam(value="reverse", defaultValue="0") int reverse,
         HttpServletRequest request, HttpServletResponse response
     ) throws Exception
     {
@@ -170,7 +197,7 @@ public class RestApiController
         
         // generate response
         JSONArray sharetitle = new JSONArray();
-        ArrayList<WebsiteModel> websites = db.getAllWebsites();
+        ArrayList<WebsiteModel> websites = db.getAllWebsites(is_visit, reverse);
         for (int idx = 0; idx < websites.size(); ++idx)
         {
             if (limit == 0)

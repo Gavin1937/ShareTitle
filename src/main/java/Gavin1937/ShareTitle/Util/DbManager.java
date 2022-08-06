@@ -123,7 +123,7 @@ public class DbManager
         return ret;
     }
     
-    public ArrayList<WebsiteModel> getAllWebsites()
+    public ArrayList<WebsiteModel> getAllWebsites(int is_visit, int reverse)
         throws Exception
     {
         __checkConnection();        
@@ -131,7 +131,35 @@ public class DbManager
         ArrayList<WebsiteModel> ret = new ArrayList<WebsiteModel>();
         try
         {
-            String sql = "SELECT * FROM websites;";
+            // build sql from param
+            String sql = "SELECT * FROM websites ";
+            switch (is_visit)
+            {
+            case 0:
+                sql += "WHERE is_visited = 0 ";
+                break;
+            case 1:
+                sql += "WHERE is_visited = 1 ";
+                break;
+            default:
+                break;
+            }
+            switch (reverse)
+            {
+            case 0: // false
+                sql += "ORDER BY id ";
+                break;
+            case 1: // true
+                sql += "ORDER BY id DESC ";
+                break;
+            default:
+                sql += "ORDER BY id ";
+                break;
+            }
+            sql += ";";
+            
+            
+            MyLogger.debug("sql: {}", sql);
             Statement select = __dbConnection.createStatement();
             ResultSet rs = select.executeQuery(sql);
             while (rs.next())

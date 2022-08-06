@@ -49,15 +49,9 @@ public class RestApiExceptionHandler extends ResponseEntityExceptionHandler
         WebRequest request
     )
     {
-        String path = servlet_request.getServletPath();
         JSONObject resp = new JSONObject();
         resp.put("ok", false);
-        
-        // handle specific type mismatch exception
-        if (path.contains("/allsharetitles/"))
-            resp.put("error", "Input limit must be an integer");
-        else if (path.contains("/sharetitle/"))
-            resp.put("error", "Input id must be an integer");
+        resp.put("error", "Input parameter must be an integer");
         
         // response
         Utilities.logRequestResp("WARN", servlet_request, resp);

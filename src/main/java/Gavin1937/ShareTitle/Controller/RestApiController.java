@@ -159,7 +159,7 @@ public class RestApiController
      * @param
      *  limit => int limiting how many sharetitle returns.
      *  <ul>
-     *  <li>If limit is negative numbber, return all sharetitles. (same as getAllSharetitles())</li>
+     *  <li>If limit is negative number, return all sharetitles. (same as getAllSharetitles())</li>
      *  </ul>
      *  
      * @param
@@ -415,7 +415,7 @@ public class RestApiController
     
     
     /**
-     * PUT toggle is_visited for a sharetitle in database specified by id
+     * PUT toggle is_visited field of a sharetitle in database specified by id
      * 
      * @param
      *  id => integer id exists in database

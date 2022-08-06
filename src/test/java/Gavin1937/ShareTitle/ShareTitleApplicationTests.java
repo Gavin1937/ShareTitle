@@ -18,7 +18,7 @@ class ShareTitleApplicationTests {
     public static void setup()
         throws IOException
     {
-        config.readConfig("./test_config.json");
+        config.readConfig("./data/test_config.json");
         MyLogger.init(config.getLogPath(), config.getLogLevel());
     }
     

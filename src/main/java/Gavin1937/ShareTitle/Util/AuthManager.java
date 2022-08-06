@@ -63,6 +63,7 @@ public class AuthManager
                 SELECT auth_hash = ?
                 FROM auth WHERE username = ?
             ;""";
+            MyLogger.debug("sql: {}", sql);
             PreparedStatement compare = __dbConnection.prepareStatement(sql);
             compare.setString(1, auth_hash.toLowerCase());
             compare.setString(2, username.toLowerCase());
@@ -92,6 +93,7 @@ public class AuthManager
             PreparedStatement insert = __dbConnection.prepareStatement(sql);
             insert.setString(1, auth_hash.toLowerCase());
             insert.setString(2, username.toLowerCase());
+            MyLogger.debug("sql: {}", sql);
             insert.executeUpdate();
             __updateMtime();
             ret = true;

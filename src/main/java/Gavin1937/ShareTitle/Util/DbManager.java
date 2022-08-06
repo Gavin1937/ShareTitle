@@ -57,6 +57,7 @@ public class DbManager
         try
         {
             String sql = "SELECT COUNT(*) FROM websites;";
+            MyLogger.debug("sql: {}", sql);
             Statement select = __dbConnection.createStatement();
             ResultSet rs = select.executeQuery(sql);
             if (rs.next())
@@ -79,6 +80,7 @@ public class DbManager
         try
         {
             String sql = "SELECT mtime from table_update_info WHERE name = \"websites\";";
+            MyLogger.debug("sql: {}", sql);
             Statement select = __dbConnection.createStatement();
             ResultSet rs = select.executeQuery(sql);
             if (rs.next())
@@ -102,6 +104,7 @@ public class DbManager
         try
         {
             String sql = "SELECT * FROM websites WHERE id = ?;";
+            MyLogger.debug("sql: {}", sql);
             PreparedStatement select = __dbConnection.prepareStatement(sql);
             select.setInt(1, id);
             ResultSet rs = select.executeQuery();
@@ -195,6 +198,7 @@ public class DbManager
                 INSERT INTO websites(title, url, domain, parent_child, time)
                 VALUES(?, ?, ?, ?, ?)
             ;""";
+            MyLogger.debug("sql: {}", sql);
             PreparedStatement insert = __dbConnection.prepareStatement(sql);
             
             if (TitleParser.parse(text))
@@ -215,6 +219,7 @@ public class DbManager
                 SELECT * FROM websites
                 WHERE id = (SELECT MAX(id) FROM websites)
             ;""";
+            MyLogger.debug("sql: {}", sql);
             Statement select = __dbConnection.createStatement();
             ResultSet rs = select.executeQuery(sql);
             if (rs.next())
@@ -250,6 +255,7 @@ public class DbManager
         {
             // delete
             String sql = "DELETE FROM websites WHERE id = ?;";
+            MyLogger.debug("sql: {}", sql);
             PreparedStatement delete = __dbConnection.prepareStatement(sql);
             
             delete.setInt(1, id);
@@ -278,6 +284,7 @@ public class DbManager
         {
             // set visited
             String sql = "UPDATE websites SET is_visited = NOT is_visited WHERE id = ?;";
+            MyLogger.debug("sql: {}", sql);
             PreparedStatement setvisit = __dbConnection.prepareStatement(sql);
             setvisit.setInt(1, id);
             setvisit.executeUpdate();
@@ -310,6 +317,7 @@ public class DbManager
         {
             // set visited
             String sql = "SELECT * FROM websites WHERE id = ?;";
+            MyLogger.debug("sql: {}", sql);
             PreparedStatement checkexists = __dbConnection.prepareStatement(sql);
             
             checkexists.setInt(1, id);
@@ -336,6 +344,7 @@ public class DbManager
         {
             // get last id
             String sql = "SELECT MAX(id) FROM websites;";
+            MyLogger.debug("sql: {}", sql);
             Statement maxid = __dbConnection.createStatement();
             ResultSet rs = maxid.executeQuery(sql);
             if (rs.next())
@@ -343,12 +352,14 @@ public class DbManager
             
             // delete last entry
             sql = "DELETE FROM websites WHERE id = ?;";
+            MyLogger.debug("sql: {}", sql);
             PreparedStatement delete = __dbConnection.prepareStatement(sql);
             delete.setInt(1, id);
             delete.executeUpdate();
             
             // decrement auto_increment counter
             sql = "UPDATE sqlite_sequence SET seq = seq-1;";
+            MyLogger.debug("sql: {}", sql);
             PreparedStatement update = __dbConnection.prepareStatement(sql);
             update.executeUpdate();
             

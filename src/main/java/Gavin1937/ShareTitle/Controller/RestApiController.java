@@ -44,11 +44,13 @@ public class RestApiController
      * GET database status
      * 
      * @return response json string:
+     * <code>
      * {
      *  "last_update_time":int,
      *  "sharetitle_count":int,
      *  "ok":boolean
      * }
+     * </code>
      * 
      * @throws Exception
      */
@@ -77,7 +79,25 @@ public class RestApiController
     /**
      * GET all sharetitles from database
      * 
+     * @param
+     *  is_visit => int request parameter setting value of "is_visited" field.
+     *  <ul>
+     *  <li>If set to 1, query all sharetitle w/ "is_visited" = 1.</li>
+     *  <li>If set to 0, query all sharetitle w/ "is_visited" = 0.</li>
+     *  <li>Otherwise query all sharetitle.</li>
+     *  <li>Default = -1 (query all).</li>
+     *  </ul>
+     *  
+     * @param
+     *  reverse => int request parameter setting order of return sharetitles.
+     *  <ul>
+     *  <li>If set to 1, order in ascending order by id.</li>
+     *  <li>If set to 0, order in descending order by id.</li>
+     *  <li>Default = 0 (ascending order).</li>
+     *  </ul>
+     *  
      * @return response json string:
+     * <code>
      * {
      *  "sharetitles": [
      *   {
@@ -94,6 +114,7 @@ public class RestApiController
      *  "length": int,
      *  "ok": boolean
      * }
+     * </code>
      *  
      * @throws Exception
      */
@@ -222,6 +243,7 @@ public class RestApiController
      *  id => integer id exists in database
      *  
      * @return response json string:
+     * <code>
      * {
      *  "sharetitle": {
      *   "domain": string,
@@ -234,6 +256,8 @@ public class RestApiController
      *  },
      *  "ok": boolean
      * }
+     * </code>
+     *  
      * @throws Exception
      */
     @GetMapping(value={"/sharetitle/{id}"})
@@ -277,7 +301,9 @@ public class RestApiController
      * 
      * @param
      *  data => plain text title in POST request body
+     *  
      * @return response json string:
+     * <code>
      * {
      *  "sharetitle": {
      *   "domain": string,
@@ -290,7 +316,8 @@ public class RestApiController
      *  },
      *  "ok": boolean
      * }
-     * 
+     * </code>
+     *  
      * @throws Exception
      */
     @PostMapping(value="/sharetitle", headers="Content-Type=text/plain")
@@ -342,10 +369,13 @@ public class RestApiController
      *  id => integer id exists in database
      *  
      * @return response json string:
+     * <code>
      * {
      *  "id": int,
      *  "ok": boolean
      * }
+     * </code>
+     *  
      * @throws Exception
      */
     @DeleteMapping(value={"/sharetitle/{id}"})
@@ -391,11 +421,14 @@ public class RestApiController
      *  id => integer id exists in database
      *  
      * @return response json string:
+     * <code>
      * {
      *  "id": int,
      *  "is_visited": int,
      *  "ok": boolean
      * }
+     * </code>
+     *  
      * @throws Exception
      */
     @PutMapping(value={"/sharetitle/{id}"})

@@ -1,0 +1,11 @@
+
+{
+    "require_auth": false,
+    "auth_database_path": "/app/data/sharetitle_auth.sqlite",
+    "database_path": "/app/data/sharetitle.sqlite",
+    "title_parse_script": "/app/data/parseScript.json",
+    "log_path": "/app/data/test.log",
+    "log_level": "info",
+    "port": 8080
+}
+

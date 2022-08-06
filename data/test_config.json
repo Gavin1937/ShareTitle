@@ -3,8 +3,8 @@
     "require_auth": false,
     "auth_database_path": ":memory:",
     "database_path": ":memory:",
-    "title_parse_script": "./parseScript.json",
-    "log_path": "./test.log",
+    "title_parse_script": "./data/parseScript.json",
+    "log_path": "./data/test.log",
     "log_level": "debug",
     "port": 8080
 }

@@ -69,5 +69,5 @@
 		"domain": "ehentai",
 		"regex": "^(.*) - (http.*e-hentai.*/s/.*)$",
 		"parent_child": 1
-	},
+	}
 ]

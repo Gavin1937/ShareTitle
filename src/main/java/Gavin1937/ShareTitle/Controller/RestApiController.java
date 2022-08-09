@@ -425,6 +425,7 @@ public class RestApiController
      * {
      *  "id": int,
      *  "is_visited": int,
+     *  "time": int,
      *  "ok": boolean
      * }
      * </code>
@@ -445,10 +446,10 @@ public class RestApiController
             return auth_ret;
         
         // generate response
-        int toggleRes = db.toggleVisited(id);
+        ArrayList<Integer> toggleRes = db.toggleVisited(id);
         HttpStatus status = HttpStatus.OK;
         JSONObject resp = new JSONObject();
-        if (toggleRes == -1)
+        if (toggleRes == null)
         {
             status = HttpStatus.BAD_REQUEST;
             resp.put("ok", false);
@@ -459,7 +460,8 @@ public class RestApiController
         {
             status = HttpStatus.OK;
             resp.put("ok", true);
-            resp.put("is_visited", toggleRes);
+            resp.put("is_visited", toggleRes.get(0));
+            resp.put("time", toggleRes.get(1));
             resp.put("id", id);
             Utilities.logRequestResp("INFO", request, resp);
         }

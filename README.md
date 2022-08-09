@@ -133,6 +133,7 @@ I use it with [Android App HTTP Shortcuts](https://http-shortcuts.rmy.ch/documen
 {
  "id": int,
  "is_visited": int,
+ "time": int,
  "ok": boolean
 }
 ```

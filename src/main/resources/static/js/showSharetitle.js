@@ -76,11 +76,18 @@ function toggleVisited(id)
             
             var jresp = JSON.parse(responseText.target.response);
             var vs_th = document.querySelector(`[id="${jresp.id}"] .visitStatus`);
+            var time_th = document.querySelector(`[id="${jresp.id}"] .time`);
             var glb_vs_th = globalThis.websiteTableDOM.querySelector(`[id="${id}"] .visitStatus`);
+            var glb_time_th = globalThis.websiteTableDOM.querySelector(`[id="${id}"] .time`);
             var filter_mode = parseInt(sessionStorage.getItem("filter_mode"));
             
+            // success
             if (xhr.status == 200 && jresp.ok == true) {
                 // update row element 
+                time_th.setAttribute("time", jresp.time);
+                time_th.innerHTML = jresp.time;
+                glb_time_th.setAttribute("time", jresp.time);
+                glb_time_th.innerHTML = jresp.time;
                 if (jresp.is_visited == 0) {
                     vs_th.children[0].innerHTML = "unvisited";
                     vs_th.children[0].style.color = "red";
@@ -97,6 +104,8 @@ function toggleVisited(id)
                     glb_vs_th.setAttribute("visited", 1);
                 }
                 
+                beautifyRow(jresp.id);
+                
                 // rm current row in table & update sharetitle count
                 if (filter_mode != -1 && filter_mode != jresp.is_visited) {
                     vs_th.parentNode.parentNode.removeChild(vs_th.parentNode);
@@ -105,7 +114,9 @@ function toggleVisited(id)
                     table_title.innerHTML = table_title.innerHTML.replace(/#|\d+/, globalThis.filteredWebsiteCount.toString());
                 }
                 
-            } else if (xhr.status == 400 && jresp.ok == false) {
+            }
+            // fail
+            else if (xhr.status == 400 && jresp.ok == false) {
                 alert(jresp.error);
             }
         }
@@ -128,6 +139,7 @@ function filterWebsites()
     if (mode == -1) {
         globalThis.websiteTableDOM.querySelectorAll("tr[id]").forEach(function(item){
             tbody.appendChild(item.cloneNode(true));
+            beautifyRow(item.getAttribute("id"));
             counter++;
         })
     } else {
@@ -137,6 +149,7 @@ function filterWebsites()
             }
         ).forEach(function(item){
             tbody.appendChild(item.cloneNode(true));
+            beautifyRow(item.getAttribute("id"));
             counter++;
         })
     }
@@ -194,7 +207,7 @@ function beautifyRow(id)
     var time_th = tr_elem.querySelector(".time");
     var time = new Date(parseInt(time_th.getAttribute("time"))*1000);
     var y = String(time.getFullYear());
-    var m = String(time.getMonth()).padStart(2, '0');
+    var m = String(time.getMonth()+1).padStart(2, '0');
     var d = String(time.getDate()).padStart(2, '0');
     var H = String(time.getHours()).padStart(2, '0');
     var M = String(time.getMinutes()).padStart(2, '0');

@@ -2,6 +2,11 @@
 globalThis.websiteTableDOM = null;
 globalThis.filteredWebsiteCount = 0;
 
+// 0: not sort by id, 1: ascending, 2: descending
+globalThis.sortByIdStat = 0;
+// 0: not sort by time, 1: ascending, 2: descending
+globalThis.sortByTimeStat = 0;
+
 
 function collectWebsites()
 {
@@ -244,4 +249,102 @@ function deleteSharetitle(id)
     }
     
     xhr.send();
+}
+
+function sortTable(sortMode, keyFn)
+{
+    var all_tr = document.querySelectorAll("tbody tr[id]");
+    // sort ascending
+    if (sortMode == 1)
+    {
+        all_tr = Array.from(all_tr).sort(function(a, b){
+            var a = keyFn(a);
+            var b = keyFn(b);
+            if (a > b) return 1;
+            else if (a < b) return -1;
+            else return 0;
+        });
+    }
+    // sort descending
+    else if (sortMode == 2)
+    {
+        all_tr = Array.from(all_tr).sort(function(a, b){
+            var a = keyFn(a);
+            var b = keyFn(b);
+            if (a > b) return -1;
+            else if (a < b) return 1;
+            else return 0;
+        });
+    }
+    
+    // rm all children from DOM
+    var tbody = document.querySelector("tbody");
+    while (tbody.children.length > 1) {
+        tbody.removeChild(tbody.children[1]);
+    }
+    
+    // put sorted list into DOM
+    all_tr.forEach(function(row){
+        tbody.appendChild(row.cloneNode(true));
+        beautifyRow(row.getAttribute("id"));
+    });
+}
+
+function sortById()
+{
+    if (globalThis.sortByIdStat == 0)
+    {
+        globalThis.sortByTimeStat = 0;
+        globalThis.sortByIdStat = 1;
+        sortTable(globalThis.sortByIdStat, function(row){
+            return row.getAttribute("id");
+        });
+        document.querySelector("tbody").children[0].children[4].innerHTML = "Time (UTC)&nbsp;&nbsp;";
+        document.querySelector("tbody").children[0].children[0].innerHTML = "Id&nbsp;▾";
+    }
+    else if (globalThis.sortByIdStat == 1)
+    {
+        globalThis.sortByIdStat = 2;
+        sortTable(globalThis.sortByIdStat, function(row){
+            return row.getAttribute("id");
+        });
+        document.querySelector("tbody").children[0].children[0].innerHTML = "Id&nbsp;▴";
+    }
+    else if (globalThis.sortByIdStat == 2)
+    {
+        globalThis.sortByIdStat = 1;
+        sortTable(globalThis.sortByIdStat, function(row){
+            return row.getAttribute("id");
+        });
+        document.querySelector("tbody").children[0].children[0].innerHTML = "Id&nbsp;▾";
+    }
+}
+function sortByTime()
+{
+    if (globalThis.sortByTimeStat == 0)
+    {
+        globalThis.sortByIdStat = 0;
+        globalThis.sortByTimeStat = 1;
+        sortTable(globalThis.sortByTimeStat, function(row){
+            return row.querySelector(".time").getAttribute("time");
+        });
+        document.querySelector("tbody").children[0].children[0].innerHTML = "Id&nbsp;&nbsp;";
+        document.querySelector("tbody").children[0].children[4].innerHTML = "Time (UTC)&nbsp;▾";
+    }
+    else if (globalThis.sortByTimeStat == 1)
+    {
+        globalThis.sortByTimeStat = 2;
+        sortTable(globalThis.sortByTimeStat, function(row){
+            return row.querySelector(".time").getAttribute("time");
+        });
+        document.querySelector("tbody").children[0].children[4].innerHTML = "Time (UTC)&nbsp;▴";
+    }
+    else if (globalThis.sortByTimeStat == 2)
+    {
+        globalThis.sortByTimeStat = 1;
+        sortTable(globalThis.sortByTimeStat, function(row){
+            return row.querySelector(".time").getAttribute("time");
+        });
+        document.querySelector("tbody").children[0].children[4].innerHTML = "Time (UTC)&nbsp;▾";
+    }
 }

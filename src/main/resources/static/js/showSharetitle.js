@@ -297,7 +297,7 @@ function sortById()
         globalThis.sortByTimeStat = 0;
         globalThis.sortByIdStat = 1;
         sortTable(globalThis.sortByIdStat, function(row){
-            return row.getAttribute("id");
+            return parseInt(row.getAttribute("id"));
         });
         document.querySelector("tbody").children[0].children[4].innerHTML = "Time (UTC)&nbsp;&nbsp;";
         document.querySelector("tbody").children[0].children[0].innerHTML = "Id&nbsp;▾";
@@ -306,7 +306,7 @@ function sortById()
     {
         globalThis.sortByIdStat = 2;
         sortTable(globalThis.sortByIdStat, function(row){
-            return row.getAttribute("id");
+            return parseInt(row.getAttribute("id"));
         });
         document.querySelector("tbody").children[0].children[0].innerHTML = "Id&nbsp;▴";
     }
@@ -314,7 +314,7 @@ function sortById()
     {
         globalThis.sortByIdStat = 1;
         sortTable(globalThis.sortByIdStat, function(row){
-            return row.getAttribute("id");
+            return parseInt(row.getAttribute("id"));
         });
         document.querySelector("tbody").children[0].children[0].innerHTML = "Id&nbsp;▾";
     }
@@ -326,7 +326,7 @@ function sortByTime()
         globalThis.sortByIdStat = 0;
         globalThis.sortByTimeStat = 1;
         sortTable(globalThis.sortByTimeStat, function(row){
-            return row.querySelector(".time").getAttribute("time");
+            return parseInt(row.querySelector(".time").getAttribute("time"));
         });
         document.querySelector("tbody").children[0].children[0].innerHTML = "Id&nbsp;&nbsp;";
         document.querySelector("tbody").children[0].children[4].innerHTML = "Time (UTC)&nbsp;▾";
@@ -335,7 +335,7 @@ function sortByTime()
     {
         globalThis.sortByTimeStat = 2;
         sortTable(globalThis.sortByTimeStat, function(row){
-            return row.querySelector(".time").getAttribute("time");
+            return parseInt(row.querySelector(".time").getAttribute("time"));
         });
         document.querySelector("tbody").children[0].children[4].innerHTML = "Time (UTC)&nbsp;▴";
     }
@@ -343,7 +343,7 @@ function sortByTime()
     {
         globalThis.sortByTimeStat = 1;
         sortTable(globalThis.sortByTimeStat, function(row){
-            return row.querySelector(".time").getAttribute("time");
+            return parseInt(row.querySelector(".time").getAttribute("time"));
         });
         document.querySelector("tbody").children[0].children[4].innerHTML = "Time (UTC)&nbsp;▾";
     }

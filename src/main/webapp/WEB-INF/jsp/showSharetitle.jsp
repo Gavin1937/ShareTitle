@@ -52,7 +52,7 @@
             
             <tr>
                 <th scope="col" onclick="sortById();">Id&nbsp;&nbsp;</th>
-                <th scope="col" style="width:40%;">Title</th>
+                <th scope="col" style="width:60%;">Title</th>
                 <th scope="col">link</th>
                 <th scope="col">visitStatus</th>
                 <th scope="col" onclick="sortByTime();">Time (UTC)&nbsp;&nbsp;</th>

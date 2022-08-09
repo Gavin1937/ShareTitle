@@ -1,4 +1,6 @@
 
+[![](https://github.com/Gavin1937/ShareTitle/actions/workflows/docker-image.yml/badge.svg)](https://github.com/Gavin1937/ShareTitle/actions/workflows/docker-image.yml)
+
 ## Share title & url to custom server
 
 This is a spring boot application which functionally similar to browser bookmark but with REST api to help you manipulate database remotely.

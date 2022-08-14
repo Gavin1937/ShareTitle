@@ -361,5 +361,5 @@ Or, if you don't have maven installed, you can use portable maven shipped with p
 
 Be sure to **have JAVA_HOME environment variable setup**
 
-You can use [DockerConfigureBuild.py](./DockerConfigureBuild.py) to build project and docker image at once. (**Require Python3**)
+You can use [DockerConfigureBuild.py](./DockerConfigureBuild.py) to build project and docker image at once. (**Require Python >= 3.8**)
 

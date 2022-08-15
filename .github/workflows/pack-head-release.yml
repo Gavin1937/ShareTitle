@@ -1,10 +1,10 @@
-name: Pack Head Release
+name: Pack heading Release
 
 on:
   push:
-    tags: [ "head" ]
+    tags: [ "heading" ]
   pull_request:
-    tags: [ "head" ]
+    tags: [ "heading" ]
 
 jobs:
   
@@ -37,6 +37,6 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         files: ./ShareTitle.zip
-        tag: head
-        release: head
+        tag: heading
+        release: heading
         prerelease: false

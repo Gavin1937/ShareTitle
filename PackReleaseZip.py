@@ -2,6 +2,17 @@
 
 from pathlib import Path
 from zipfile import ZipFile
+from subprocess import Popen, PIPE
+from platform import system as currentOS
+
+OSTYPE = currentOS()
+
+def build() -> None:
+    if OSTYPE == "Windows":
+        mvn = Popen(["mvnw.cmd","clean","package"])
+    else:
+        mvn = Popen(["./mvnw","clean","package"])
+    mvn.wait()
 
 def pack() -> None:
     # prep
@@ -24,4 +35,5 @@ def pack() -> None:
 
 
 if __name__ == "__main__":
+    build()
     pack()

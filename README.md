@@ -7,8 +7,6 @@
 
 ## Share title & url to custom server
 
-tmp
-
 This is a spring boot application which functionally similar to browser bookmark but with REST api to help you manipulate database remotely.
 
 In this project, **sharetitle** is basically **bookmarks** or **plain text of website title & url**

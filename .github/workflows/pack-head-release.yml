@@ -32,11 +32,31 @@ jobs:
         ./PackReleaseZip.py
       shell: bash
     
-    - name: Update Release
-      uses: johnwbyrd/update-release@v1.0.0
+    - name: Delete Release
+      uses: dev-drprasad/delete-tag-and-release@v0.2.0
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        files: ./ShareTitle.zip
-        tag: heading
-        release: heading
+        delete_release: true # default: false
+        tag_name: heading # tag name to delete
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    # - name: Update Release
+    #   uses: johnwbyrd/update-release@v1.0.0
+    #   with:
+    #     token: ${{ secrets.GITHUB_TOKEN }}
+    #     files: ./ShareTitle.zip
+    #     tag: heading
+    #     release: heading
+    #     prerelease: false
+    
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: heading
+        release_name: heading
+        body: 'This release is a release of the HEAD of repository. It will update as HEAD updates.'
+        draft: false
         prerelease: false

@@ -93,6 +93,11 @@ public class ConfigManager
         }
     }
     
+    public String getLogLevelStr()
+    {
+        return __config.getString("log_level").toUpperCase();
+    }
+    
     
     // private constructor for singleton
     private ConfigManager() {}

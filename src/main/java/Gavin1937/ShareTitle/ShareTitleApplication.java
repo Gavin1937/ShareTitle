@@ -43,13 +43,8 @@ public class ShareTitleApplication
         }
         
         
-        MyLogger.trace("Trace msg for testing.");
-        MyLogger.debug("Debug msg for testing.");
-        MyLogger.info("Info msg for testing.");
-        MyLogger.warn("Warn msg for testing.");
-        MyLogger.error("Error msg for testing.");
-        
         MyLogger.info("Finish configuration, starting spring application...");
+        MyLogger.info("Logging Level: [{}]", config.getLogLevelStr());
         MyLogger.info("Start Server On Port: [{}]", config.getServerPort());
         
         

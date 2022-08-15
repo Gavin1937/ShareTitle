@@ -2,7 +2,7 @@
 
 from pathlib import Path
 from zipfile import ZipFile
-from subprocess import Popen, PIPE
+from subprocess import Popen
 from platform import system as currentOS
 
 OSTYPE = currentOS()
@@ -28,6 +28,7 @@ def pack() -> None:
     pom = root/"pom.xml"
     webapp = root/"src/main/webapp/WEB-INF/jsp"
     jar = root/"target/ShareTitle.jar"
+    autoupdate = root/"AutoUpdate.py"
     
     # rm old archive
     if archive.exists():
@@ -40,6 +41,7 @@ def pack() -> None:
         for jsp in webapp.iterdir():
             zip.write(jsp, "ShareTitle/src/main/webapp/WEB-INF/jsp/"+jsp.name)
         zip.write(jar, "ShareTitle/target/ShareTitle.jar")
+        zip.write(autoupdate, "ShareTitle/AutoUpdate.py")
 
 
 if __name__ == "__main__":

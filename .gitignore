@@ -46,3 +46,6 @@ build/
 !test_config.json
 !docker_config.json
 !parseScript.json
+
+### blacklist ###
+git*py

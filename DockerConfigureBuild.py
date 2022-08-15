@@ -72,4 +72,3 @@ if __name__ == "__main__":
     print("\n\n\nBuilding docker image...")
     docker = Popen(["docker","build","-t","gavin1937/sharetitle:latest","."])
     docker.wait()
-

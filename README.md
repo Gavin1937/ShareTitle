@@ -20,6 +20,7 @@ I use it with [Android App HTTP Shortcuts](https://http-shortcuts.rmy.ch/documen
 * **[Optional]** Maven >= 3.8.6
 * **[Optional]** Docker latest
 * **[Optional]** Sqlite3 for database
+* **[Optional]** Python >= 3.8 for all python scripts
 
 
 ## REST API
@@ -332,7 +333,11 @@ docker run -d --restart unless-stopped \
 
 ### Deploy Manually
 
-[Build project manully](#build) and run **target/ShareTitle.jar** file from project's root directory.
+First, you need to [Build project manully](#build) or [Download the pre-build package](https://github.com/Gavin1937/ShareTitle/releases/download/head/ShareTitle.zip)
+
+Next, unzip the package if you choose pre-build package.
+
+Then, run **target/ShareTitle.jar** file from project's root directory.
 
 You must run jar file **from project's root directory** so spring boot can find all jsp files for the frontend.
 
@@ -350,22 +355,22 @@ This project use maven as build system.
 To build application, run
 
 ```sh
-mvn package
+mvn clean package
 ```
 
 Or, if you don't have maven installed, you can use portable maven shipped with repository
 
 **Unix system**
 ```sh
-./mvnw package
+./mvnw clean package
 ```
 
 **Windows**
 ```sh
-mvnw.cmd package
+mvnw.cmd clean package
 ```
 
 Be sure to **setup JAVA_HOME environment variable before build the repository**
 
-You can use [DockerConfigureBuild.py](./DockerConfigureBuild.py) to build project and docker image at once. (**Require Python >= 3.8**)
+You can use [DockerConfigureBuild.py](./DockerConfigureBuild.py) to build project and docker image at once.
 

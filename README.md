@@ -7,15 +7,15 @@ This is a spring boot application which functionally similar to browser bookmark
 
 In this project, **sharetitle** is basically **bookmarks** or **plain text of website title & url**
 
-I use it with [Android App HTTP Shortcuts](https://http-shortcuts.rmy.ch/documentation) so I can share within other apps.
+I use it with [Android App HTTP Shortcuts](https://http-shortcuts.rmy.ch/documentation) so I can share websites to server from other apps.
 
 
 ## Requirements
 
-* Java 17
-* [Optional] Maven >= 3.8.6
-* [Optional] Docker latest
-* [Optional] Sqlite3 for database
+* Java JRE 17 (Java JDK 17 if you want to [Deploy Manually](#deploy-manually))
+* **[Optional]** Maven >= 3.8.6
+* **[Optional]** Docker latest
+* **[Optional]** Sqlite3 for database
 
 
 ## REST API
@@ -38,14 +38,14 @@ I use it with [Android App HTTP Shortcuts](https://http-shortcuts.rmy.ch/documen
 
 * Get all sharetitles from database
 * Optional Path Parameter:
-  * limit => integer limiting how many sharetitle returns.
+  * `limit` => integer limiting how many sharetitle returns.
     * If supply negative number or not supply, api will return all sharetitles.
 * Optional url query:
-  * is_visit => integer url query setting if returned sharetitles is visited or not.
+  * `is_visit` => integer url query setting if returned sharetitles is visited or not.
     * If set to 0, returns non visited sharetitles
     * If set to 1, returns visited sharetitles
     * Default = -1, returns all sharetitles (non visited and visited)
-  * reverse => integer url query setting order of returned sharetitles.
+  * `reverse` => integer url query setting order of returned sharetitles.
     * If set to 1, order in ascending order by id.
     * If set to 0, order in descending order by id.
     * Default = 1 (ascending order).
@@ -73,7 +73,7 @@ I use it with [Android App HTTP Shortcuts](https://http-shortcuts.rmy.ch/documen
 
 * Get sharetitle form database specified by `id`
 * Path Parameter
-  * id => integer id exists in database
+  * `id` => integer id exists in database
 * Return
 ```json
 {
@@ -93,7 +93,7 @@ I use it with [Android App HTTP Shortcuts](https://http-shortcuts.rmy.ch/documen
 ### POST `/api/sharetitle`
 
 * Add new sharetitle to database.
-* This api **only allow Content-Type: text/plain**, be sure to change your header.
+* This endpoint **only allow Content-Type: text/plain**, be sure to change your header.
 * Request Parameter
   * plain text data that can be match by [any regex in parseScript.json](#parsescriptjson)
 * Return
@@ -114,9 +114,9 @@ I use it with [Android App HTTP Shortcuts](https://http-shortcuts.rmy.ch/documen
 
 ### DELETE `/api/sharetitle/{id}`
 
-* Delete sharetitle from database specified by id.
+* Delete sharetitle from database specified by `id`.
 * Path Parameter:
-  * id => integer id exists in database.
+  * `id` => integer id exists in database.
 * Return
 ```json
 {
@@ -127,9 +127,9 @@ I use it with [Android App HTTP Shortcuts](https://http-shortcuts.rmy.ch/documen
 
 ### PUT `/api/sharetitle/{id}`
 
-* Toggle is_visited status of a sharetitle in database specified by id.
+* Toggle is_visited status of a sharetitle in database specified by `id`.
 * Path Parameter:
-  * id => integer id exists in database.
+  * `id` => integer id exists in database.
 * Return
 ```json
 {
@@ -142,7 +142,7 @@ I use it with [Android App HTTP Shortcuts](https://http-shortcuts.rmy.ch/documen
 
 ### Errors
 
-* Most errors following this format
+* Most errors are following this format
 
 ```json
 {
@@ -151,7 +151,7 @@ I use it with [Android App HTTP Shortcuts](https://http-shortcuts.rmy.ch/documen
 }
 ```
 
-* Note that some error message may not be customized (e.g. 500 internal error), so they have spring boot's default error message
+* Note that some error message hasn't been customized (e.g. 500 internal error), so they have spring boot's default error message
 
 ```json
 {
@@ -214,7 +214,7 @@ Please configure following files before you deploy or build project.
 
 ### parseScript.json
 
-This file tells application how to parse plain text data inputted by user.
+This file tells application how to parse plain text data input by user.
 
 ```json
 [
@@ -230,14 +230,16 @@ This file tells application how to parse plain text data inputted by user.
 * This json file contains a list of object, each object parses specific type of input text data
 * `domain`
   * A string name of this type of text data.
-  * It doesn't have to be http domain of url
+  * It doesn't have to be the http domain of url
 * `regex`
   * Regular Expression to match input text
-  * Each `regex` must have 2 groups: one for title another for url
+  * Each `regex` must have 2 groups: first one for title second for url **(order matters)**
   * Example: `^(.*Twitter) - (?!http.*twitter.*status.*)(http.*twitter.*(?!status).*)$`
   * Above `regex` will parse input text of a twitter profile and separate the title and url from it.
 * `parent_child`
   * Input text is a parent link (e.g. twitter profile page) or a child link (e.g. twitter tweet page)
+  * 0 => Parent
+  * 1 => Child
 * You can use provided [parseScript.json](./data/parseScript.json) file as your foundation.
 
 
@@ -245,11 +247,11 @@ This file tells application how to parse plain text data inputted by user.
 
 ### frontend path: `/sharetitle`
 
-Simply open [http://localhost:8080/sharetitle](http://localhost:8080/sharetitle) and start navigating
+Simply visit [http://localhost:8080/sharetitle](http://localhost:8080/sharetitle) and start navigating
 
 If you set `require_auth` to true in [config.json](#configjson) you will be redirect to [http://localhost:8080/login](http://localhost:8080/login) with a login frontend.
 
-Register feature does not come with project, you need to manually edit database.
+Register feature does not come with the application, you need to manually edit database.
 
 If you really want a register page, checkout [next section](#enable-register)
 
@@ -263,18 +265,18 @@ $ sqlite3 /path/to/sharetitle_auth.sqlite3
 INSERT INTO auth VALUES("username", "auth_hash");
 ```
 
-`auth_hash` in authentication database is calculate with md5 by combining username and password. (checkout [init_auth_db.sql](./src/main/resources/sql/init_auth_db.sql) for table detail)
+`auth_hash` in authentication database is calculate by md5 with combination of username and password. (checkout [init_auth_db.sql](./src/main/resources/sql/init_auth_db.sql) for table schema)
 
 Sample python3 code to generate `auth_hash`
 
 ```py
 from hashlib import md5
 print(md5(
-        (
-            input('Enter username: ').strip().lower() + 
-            input('Enter password: ').strip()
-        ).encode('ascii')
-    ).hexdigest()
+    (
+      input('Enter username: ').strip().lower() + 
+      input('Enter password: ').strip()
+    ).encode('ascii')
+  ).hexdigest()
 )
 ```
 
@@ -283,9 +285,9 @@ Note that `auth_hash` requires a **lowercase username** combined with a password
 After you put your account in database, you can login in the frontend.
 
 
-### Enable Register Feature
+### Add Register Feature
 
-To enable register feature, uncomment `register()` function in [AuthManager.java](./src/main/java/Gavin1937/ShareTitle/Util/AuthManager.java) and `postRegister()` function in [WebappController.java](./src/main/java/Gavin1937/ShareTitle/Controller/WebappController.java)
+To add register feature, uncomment `register()` function in [AuthManager.java](./src/main/java/Gavin1937/ShareTitle/Util/AuthManager.java) and `postRegister()` function in [WebappController.java](./src/main/java/Gavin1937/ShareTitle/Controller/WebappController.java)
 
 Next, you need to implement a register form as your frontend.
 
@@ -308,7 +310,7 @@ Pull image from [DockerHub gavin1937/sharetitle](https://hub.docker.com/r/gavin1
 docker pull gavin1937/sharetitle
 ```
 
-And run container
+And start container
 
 ```sh
 docker run -d --restart unless-stopped \
@@ -318,23 +320,23 @@ docker run -d --restart unless-stopped \
            gavin1937/sharetitle:latest /container/path/to/config.json
 ```
 
-* Be sure to add `-v` to mount your local filesystem into container.
+* Be sure to add `-v` flag to mount your local filesystem into container.
 * Last argument is your [config.json](#configjson) with path in the container.
-* When you configure [config.json](#configjson) for container, be sure use path in the container.
-* Highly recommend sticking with working directory **/app**, just put all configuration, log, and database in a local directory and mount it with **/app/data**.
+* When you configure [config.json](#configjson) for container, be sure to use path in the container.
+* Highly recommend sticking with working directory **/app**, just put all configuration, log, and database in a local directory and then mount it to **/app/data**.
 * You can use provided [docker_config.json](./data/docker_config.json) file as your base.
 
 ### Deploy Manually
 
 [Build project manully](#build) and run **target/ShareTitle.jar** file from project's root directory.
 
-You must run jar file **from project's root directory** so spring boot can find all jsp files for frontend.
+You must run jar file **from project's root directory** so spring boot can find all jsp files for the frontend.
 
 ```sh
 java -jar target/ShareTitle.jar /path/to/your/config.json
 ```
 
-For linux users, you can use [sharetitle.service](./sharetitle.service) with systemd to help you setup auto launch application at start up.
+For linux users, you can use [sharetitle.service](./sharetitle.service) with systemd to help you setup application auto launch at start up.
 
 
 ## Build
@@ -347,7 +349,7 @@ To build application, run
 mvn package
 ```
 
-Or, if you don't have maven installed, you can use portable maven shipped with project
+Or, if you don't have maven installed, you can use portable maven shipped with repository
 
 **Unix system**
 ```sh
@@ -356,10 +358,10 @@ Or, if you don't have maven installed, you can use portable maven shipped with p
 
 **Windows**
 ```sh
-./mvnw.cmd package
+mvnw.cmd package
 ```
 
-Be sure to **have JAVA_HOME environment variable setup**
+Be sure to **setup JAVA_HOME environment variable before build the repository**
 
 You can use [DockerConfigureBuild.py](./DockerConfigureBuild.py) to build project and docker image at once. (**Require Python >= 3.8**)
 

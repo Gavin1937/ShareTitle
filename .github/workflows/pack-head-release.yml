@@ -35,8 +35,8 @@ jobs:
     - name: Delete Release
       uses: dev-drprasad/delete-tag-and-release@v0.2.0
       with:
-        delete_release: true # default: false
-        tag_name: heading # tag name to delete
+        delete_release: true
+        tag_name: heading
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
@@ -44,7 +44,7 @@ jobs:
       id: create_release
       uses: actions/create-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: heading
         release_name: heading
@@ -58,7 +58,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./ShareTitle.zip
         asset_name: ShareTitle.zip
         asset_content_type: application/zip

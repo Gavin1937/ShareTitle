@@ -1,7 +1,11 @@
 
-## Share title & url to custom server
+# [ShareTitle](https://github.com/Gavin1937/ShareTitle)
 
 [![](https://github.com/Gavin1937/ShareTitle/actions/workflows/docker-image.yml/badge.svg)](https://github.com/Gavin1937/ShareTitle/actions/workflows/docker-image.yml)
+
+[![Pack Head Release](https://github.com/Gavin1937/ShareTitle/actions/workflows/pack-head-release.yml/badge.svg)](https://github.com/Gavin1937/ShareTitle/actions/workflows/pack-head-release.yml)
+
+## Share title & url to custom server
 
 This is a spring boot application which functionally similar to browser bookmark but with REST api to help you manipulate database remotely.
 

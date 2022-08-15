@@ -25,25 +25,35 @@ def pack() -> None:
     # prep
     root = Path(".")
     archive = root/"ShareTitle.zip"
-    pom = root/"pom.xml"
-    webapp = root/"src/main/webapp/WEB-INF/jsp"
-    jar = root/"target/ShareTitle.jar"
-    autoupdate = root/"AutoUpdate.py"
     
     # rm old archive
     if archive.exists():
         archive.unlink()
     
+    # files to add
+    singlefiles = [
+        root/"pom.xml",
+        root/"sharetitle.service",
+        root/"README.md",
+        root/"LICENSE",
+        root/"AutoUpdate.py",
+        root/"target/ShareTitle.jar"
+    ]
+    recursivefile = [
+        root/"src/main/webapp/WEB-INF/jsp",
+    ]
+    
     # pack new archive
     print("Save Release to: "+str(archive))
     with ZipFile(archive, "w") as zip:
-        zip.write(pom, "ShareTitle/pom.xml")
-        for jsp in webapp.iterdir():
-            zip.write(jsp, "ShareTitle/src/main/webapp/WEB-INF/jsp/"+jsp.name)
-        zip.write(jar, "ShareTitle/target/ShareTitle.jar")
-        zip.write(autoupdate, "ShareTitle/AutoUpdate.py")
+        for single in singlefiles:
+            zip.write(single, "ShareTitle/"+str(single.relative_to(root)))
+        for recur in recursivefile:
+            for r in recur.rglob("*"):
+                if r.is_file():
+                    zip.write(r, "ShareTitle/"+str(r.relative_to(root)))
 
 
 if __name__ == "__main__":
-    build()
+    # build()
     pack()

@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 
+###############################################
+#                                            #
+#  This script will help                     #
+#  released package to update automatically  #
+#                                            #
+###############################################
+
 import urllib.request
 from zipfile import ZipFile
 from pathlib import Path

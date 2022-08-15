@@ -24,3 +24,4 @@ def clean() -> None:
 if __name__ == "__main__":
     download()
     apply()
+    clean()

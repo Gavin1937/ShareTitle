@@ -1,0 +1,36 @@
+name: Pack Head Release
+
+on:
+  push:
+    tags: [ "head" ]
+  pull_request:
+    tags: [ "head" ]
+
+jobs:
+  
+  release:
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.8'
+    
+    - name: Pack
+      run: |
+        chmod +x ./PackReleaseZip.py
+        ./PackReleaseZip.py
+      shell: bash
+    
+    - name: Update release
+      uses: johnwbyrd/update-release@v1.0.0
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        files: ./target/ShareTitle.zip
+        tag: head
+        release: head
+        prerelease: false

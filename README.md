@@ -1,9 +1,9 @@
 
 # [ShareTitle](https://github.com/Gavin1937/ShareTitle)
 
-[![](https://github.com/Gavin1937/ShareTitle/actions/workflows/docker-image.yml/badge.svg)](https://github.com/Gavin1937/ShareTitle/actions/workflows/docker-image.yml)
+[![Docker Image CI](https://github.com/Gavin1937/ShareTitle/actions/workflows/docker-image.yml/badge.svg)](https://github.com/Gavin1937/ShareTitle/actions/workflows/docker-image.yml)
 
-[![Pack Head Release](https://github.com/Gavin1937/ShareTitle/actions/workflows/pack-head-release.yml/badge.svg)](https://github.com/Gavin1937/ShareTitle/actions/workflows/pack-head-release.yml)
+[![Pack heading Release](https://github.com/Gavin1937/ShareTitle/actions/workflows/pack-head-release.yml/badge.svg)](https://github.com/Gavin1937/ShareTitle/actions/workflows/pack-head-release.yml)
 
 ## Share title & url to custom server
 

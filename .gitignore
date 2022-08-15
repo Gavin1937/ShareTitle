@@ -37,6 +37,7 @@ build/
 *.sqlite
 *.db
 *.log
+*.zip
 
 ### folders ###
 

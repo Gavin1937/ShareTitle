@@ -8,6 +8,10 @@ from platform import system as currentOS
 OSTYPE = currentOS()
 
 def build() -> None:
+    
+    print("Host OS: "+OSTYPE)
+    print("Building project...")
+    
     if OSTYPE == "Windows":
         mvn = Popen(["mvnw.cmd","clean","package"])
     else:
@@ -15,8 +19,11 @@ def build() -> None:
     mvn.wait()
 
 def pack() -> None:
+    
+    print("Packing Release...")
+    
     # prep
-    root = Path()
+    root = Path(".")
     archive = root/"ShareTitle.zip"
     pom = root/"pom.xml"
     webapp = root/"src/main/webapp/WEB-INF/jsp"
@@ -27,6 +34,7 @@ def pack() -> None:
         archive.unlink()
     
     # pack new archive
+    print("Save Release to: "+str(archive))
     with ZipFile(archive, "w") as zip:
         zip.write(pom, "ShareTitle/pom.xml")
         for jsp in webapp.iterdir():

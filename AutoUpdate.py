@@ -12,7 +12,7 @@ from zipfile import ZipFile
 from pathlib import Path
 from shutil import copyfileobj
 
-FILE_URL = "https://github.com/Gavin1937/ShareTitle/releases/download/head/ShareTitle.zip"
+FILE_URL = "https://github.com/Gavin1937/ShareTitle/releases/download/heading/ShareTitle.zip"
 
 def download() -> None:
     print("Downloading Latest Release...")

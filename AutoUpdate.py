@@ -10,6 +10,7 @@
 import urllib.request
 from zipfile import ZipFile
 from pathlib import Path
+from shutil import copyfileobj
 
 FILE_URL = "https://github.com/Gavin1937/ShareTitle/releases/download/head/ShareTitle.zip"
 
@@ -20,7 +21,13 @@ def download() -> None:
 def apply() -> None:
     print("Applying New Update...")
     with ZipFile("ShareTitle.zip") as zip:
-        zip.extractall(".")
+        for member in zip.namelist():
+            outpath = member[member.find("/")+1:]
+            print(outpath)
+            source = zip.open(member)
+            target = open(outpath, "wb")
+            with source, target:
+                copyfileobj(source, target)
 
 def clean() -> None:
     print("Cleaning...")

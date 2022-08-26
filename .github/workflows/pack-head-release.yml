@@ -48,7 +48,7 @@ jobs:
       with:
         tag_name: heading
         release_name: heading
-        body: 'This release is a release of the HEAD of repository. It will update as HEAD updates.'
+        body: 'This release is a release of the HEAD of main branch. It will update as HEAD updates.'
         draft: false
         prerelease: false
     

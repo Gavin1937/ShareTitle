@@ -35,6 +35,8 @@ I use it with [Android App HTTP Shortcuts](https://http-shortcuts.rmy.ch/documen
 {
  "last_update_time":int,
  "sharetitle_count":int,
+ "sharetitle_visited_count":int,
+ "sharetitle_unvisited_count":int,
  "ok":boolean
 }
 ```

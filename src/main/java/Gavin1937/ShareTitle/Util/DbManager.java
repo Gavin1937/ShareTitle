@@ -48,12 +48,15 @@ public class DbManager
         __initDb(dbpath);
     }
     
-    public int numberOfWebsites()
+    public ArrayList<Integer> numberOfWebsites()
         throws Exception
     {
         __checkConnection();        
         
-        int ret = -1;
+        ArrayList<Integer> ret = new ArrayList<Integer>();
+        ret.add(0);
+        ret.add(0);
+        ret.add(0);
         try
         {
             String sql = "SELECT COUNT(*) FROM websites;";
@@ -61,12 +64,26 @@ public class DbManager
             Statement select = __dbConnection.createStatement();
             ResultSet rs = select.executeQuery(sql);
             if (rs.next())
-                ret = rs.getInt(1);
+                ret.set(0, rs.getInt(1));
+            
+            sql = "SELECT COUNT(*) FROM websites WHERE is_visited = 0;";
+            MyLogger.debug("sql: {}", sql);
+            select = __dbConnection.createStatement();
+            rs = select.executeQuery(sql);
+            if (rs.next())
+                ret.set(1, rs.getInt(1));
+            
+            sql = "SELECT COUNT(*) FROM websites WHERE is_visited = 1;";
+            MyLogger.debug("sql: {}", sql);
+            select = __dbConnection.createStatement();
+            rs = select.executeQuery(sql);
+            if (rs.next())
+                ret.set(2, rs.getInt(1));
         }
         catch (SQLException e)
         {
             MyLogger.error("SQLException: " + e.getMessage());
-            return -1;
+            return null;
         }
         return ret;
     }

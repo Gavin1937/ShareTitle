@@ -48,6 +48,8 @@ public class RestApiController
      * {
      *  "last_update_time":int,
      *  "sharetitle_count":int,
+     *  "sharetitle_visited_count":int,
+     *  "sharetitle_unvisited_count":int,
      *  "ok":boolean
      * }
      * </code>
@@ -68,7 +70,10 @@ public class RestApiController
         
         JSONObject resp = new JSONObject();
         resp.put("ok", true);
-        resp.put("sharetitle_count", db.numberOfWebsites());
+        ArrayList<Integer> num = db.numberOfWebsites();
+        resp.put("sharetitle_count", num.get(0));
+        resp.put("sharetitle_unvisited_count", num.get(1));
+        resp.put("sharetitle_visited_count", num.get(2));
         resp.put("last_update_time", db.lastUpdateTime());
         
         Utilities.logRequestResp("INFO", request, resp);

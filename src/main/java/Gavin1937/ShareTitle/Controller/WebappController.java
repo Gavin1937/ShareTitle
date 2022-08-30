@@ -31,6 +31,7 @@ public class WebappController
     @GetMapping("/sharetitle")
     public String showSharetitle(
         Model model,
+        RedirectAttributes redirectAttributes,
         @CookieValue(value="username", required=false) String username,
         @CookieValue(value="auth_hash", required=false) String auth_hash,
         HttpServletRequest request, HttpServletResponse response
@@ -39,7 +40,11 @@ public class WebappController
         // Authentication
         String auth_ret = __doAuth(request, username, auth_hash);
         if (auth_ret != null)
+        {
+            redirectAttributes.addFlashAttribute("auth_fail", true);
+            response.setStatus(400);
             return auth_ret;
+        }
         
         String sess_uname = (String)request.getSession().getAttribute("username");
         if (username != null)
@@ -60,17 +65,9 @@ public class WebappController
     
     @GetMapping(value="/login")
     public String showLogin(
-        Model model,
-        @CookieValue(value="username", required=false) String username,
-        @CookieValue(value="auth_hash", required=false) String auth_hash,
         HttpServletRequest request, HttpServletResponse response
     ) throws Exception
     {
-        // Authentication
-        String auth_ret = __doAuth(request, username, auth_hash);
-        if (auth_ret == null)
-            return "redirect:/sharetitle";
-        
         return "login";
     }
     

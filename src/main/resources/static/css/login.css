@@ -7,9 +7,16 @@
     font-weight: bold;
     font-size: medium;
 }
+.inline-title {
+    font-weight: bolder;
+    font-size: large;
+    display: inline-block;
+    margin-right: 3px;
+    margin-bottom: 0px;
+}
 .form-row {
-    float:left;
-    clear:both;
-    margin-top:5px;
-    margin-bottom:5px;
+    float: left;
+    clear: both;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }

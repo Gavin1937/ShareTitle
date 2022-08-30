@@ -16,7 +16,8 @@
 
 <body>
     
-    <p class="title">Login Page</p>
+    <p class="inline-title">Login Page</p>
+    <a class="inline-title" href="/sharetitle">Home Page</a>
     <p class="subtitle">Please enter username in lowercase.</p>
     <p class="subtitle">Username must be unique</p>
     <c:if test='${auth_fail == true}'>

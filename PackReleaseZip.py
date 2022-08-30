@@ -40,7 +40,7 @@ def pack() -> None:
         root/"target/ShareTitle.jar"
     ]
     recursivefile = [
-        root/"src/main/webapp/WEB-INF/jsp",
+        root/"src/main/webapp/WEB-INF/jsp"
     ]
     
     # pack new archive

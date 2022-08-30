@@ -1,7 +1,6 @@
 package Gavin1937.ShareTitle.Util;
 
 import java.io.File;
-import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 import ch.qos.logback.classic.Level;
@@ -18,10 +17,32 @@ public class ConfigManager
     }
     
     public void readConfig(String config_path)
-        throws IOException
+        throws Exception
     {
         String content = FileUtils.readFileToString(new File(config_path), "UTF-8");
         __config = new JSONObject(content);
+        
+        // checking config content
+        String key = "";
+        try
+        {
+            key = "require_auth";
+            __config.get(key);
+            key = "auth_database_path";
+            __config.get(key);
+            key = "database_path";
+            __config.get(key);
+            key = "title_parse_script";
+            __config.get(key);
+            key = "log_path";
+            __config.get(key);
+            key = "log_level";
+            __config.get(key);
+        }
+        catch (Exception err)
+        {
+            throw new Exception("Configuration File Error, key \"" + key + "\" does not exist in config.json.");
+        }
     }
     
     public JSONObject getJson()

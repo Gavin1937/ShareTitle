@@ -4,8 +4,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.IOException;
-
 import Gavin1937.ShareTitle.Util.MyLogger;
 import Gavin1937.ShareTitle.Util.ConfigManager;
 
@@ -16,7 +14,7 @@ class ShareTitleApplicationTests {
     
     @BeforeAll
     public static void setup()
-        throws IOException
+        throws Exception
     {
         config.readConfig("./data/test_config.json");
         MyLogger.init(config.getLogPath(), config.getLogLevel());

@@ -13,9 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checkout code
     - uses: actions/checkout@v3
-    
     - name: Build the Docker image
       run: |
         docker build -t ${{ secrets.DOCKER_USERNAME }}/sharetitle:latest .

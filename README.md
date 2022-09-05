@@ -374,5 +374,3 @@ mvnw.cmd clean package
 
 Be sure to **setup JAVA_HOME environment variable before build the repository**
 
-You can use [DockerConfigureBuild.py](./DockerConfigureBuild.py) to build project and docker image at once.
-

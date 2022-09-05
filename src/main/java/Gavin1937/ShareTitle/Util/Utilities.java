@@ -27,32 +27,39 @@ public class Utilities
         return new ResponseEntity<Object>(response.toString(), headers, status);
     }
     
+    public static String getReqRemoteIp(HttpServletRequest request)
+    {
+        String direct = request.getRemoteAddr();
+        String header = request.getHeader("X-Real-IP");
+        return ((header != null) ? header : direct);
+    }
+    
     public static void logRequestResp(String logLevel, HttpServletRequest request, JSONObject resp)
     {
         switch (logLevel.toUpperCase())
         {
         case "TRACE":
-            MyLogger.trace("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
+            MyLogger.trace("{}, {} {}", getReqRemoteIp(request), request.getMethod(), request.getServletPath());
             MyLogger.trace("Response data: {}", resp.toString());
             break;
         case "DEBUG":
-            MyLogger.debug("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
+            MyLogger.debug("{}, {} {}", getReqRemoteIp(request), request.getMethod(), request.getServletPath());
             MyLogger.debug("Response data: {}", resp.toString());
             break;
         case "INFO":
-            MyLogger.info("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
+            MyLogger.info("{}, {} {}", getReqRemoteIp(request), request.getMethod(), request.getServletPath());
             MyLogger.info("Response data: {}", resp.toString());
             break;
         case "WARN":
-            MyLogger.warn("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
+            MyLogger.warn("{}, {} {}", getReqRemoteIp(request), request.getMethod(), request.getServletPath());
             MyLogger.warn("{}", resp.getString("error"));
             break;
         case "ERROR":
-            MyLogger.error("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
+            MyLogger.error("{}, {} {}", getReqRemoteIp(request), request.getMethod(), request.getServletPath());
             MyLogger.error("{}", resp.getString("error"));
             break;
         default:
-            MyLogger.info("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
+            MyLogger.info("{}, {} {}", getReqRemoteIp(request), request.getMethod(), request.getServletPath());
             MyLogger.info("Response data: {}", resp.toString());
             break;
         }

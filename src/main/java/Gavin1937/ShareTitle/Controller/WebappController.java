@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import Gavin1937.ShareTitle.Util.DbManager;
 import Gavin1937.ShareTitle.Util.AuthManager;
 import Gavin1937.ShareTitle.Util.MyLogger;
+import Gavin1937.ShareTitle.Util.Utilities;
 
 
 @Controller
@@ -54,7 +55,7 @@ public class WebappController
         else
         {
             model.addAttribute("username", "anonymous");
-            MyLogger.info("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
+            MyLogger.info("{}, {} {}", Utilities.getReqRemoteIp(request), request.getMethod(), request.getServletPath());
             MyLogger.info("Login as anonymous user");
         }
         
@@ -68,6 +69,7 @@ public class WebappController
         HttpServletRequest request, HttpServletResponse response
     ) throws Exception
     {
+        MyLogger.info("{}, {} {}", Utilities.getReqRemoteIp(request), request.getMethod(), request.getServletPath());
         return "login";
     }
     
@@ -92,7 +94,7 @@ public class WebappController
         }
         
         // auth success
-        MyLogger.info("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
+        MyLogger.info("{}, {} {}", Utilities.getReqRemoteIp(request), request.getMethod(), request.getServletPath());
         MyLogger.info("[{}] Login Success", username);
         if (use_cookie)
         {
@@ -178,7 +180,7 @@ public class WebappController
             
             if (no_session && no_cookie)
             {
-                MyLogger.warn("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
+                MyLogger.warn("{}, {} {}", Utilities.getReqRemoteIp(request), request.getMethod(), request.getServletPath());
                 MyLogger.warn("Missing Authentication Cookie or Session");
                 ret = "redirect:/login";
                 skip_auth = true;
@@ -198,21 +200,21 @@ public class WebappController
             // auth fail
             if (!auth_res && !skip_auth)
             {
-                MyLogger.warn("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
+                MyLogger.warn("{}, {} {}", Utilities.getReqRemoteIp(request), request.getMethod(), request.getServletPath());
                 MyLogger.warn("Invalid Authentication");
                 ret = "redirect:/login";
             }
         }
         catch (Exception e)
         {
-            MyLogger.error("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
+            MyLogger.error("{}, {} {}", Utilities.getReqRemoteIp(request), request.getMethod(), request.getServletPath());
             MyLogger.error("Exception during auth: {}", e.getMessage());
             throw e;
         }
         
         if (ret == null)
         {
-            MyLogger.info("{}, {} {}", request.getRemoteAddr(), request.getMethod(), request.getServletPath());
+            MyLogger.info("{}, {} {}", Utilities.getReqRemoteIp(request), request.getMethod(), request.getServletPath());
             MyLogger.info("Successfully Authenticate User [{}]", username);
         }
         return ret;

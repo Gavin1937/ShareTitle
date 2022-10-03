@@ -278,7 +278,8 @@ Sample python3 code to generate `auth_hash`
 
 ```py
 from hashlib import md5
-print(md5(
+print(
+  md5(
     (
       input('Enter username: ').strip().lower() + 
       input('Enter password: ').strip()

@@ -299,7 +299,7 @@ function sortById()
         sortTable(globalThis.sortByIdStat, function(row){
             return parseInt(row.getAttribute("id"));
         });
-        document.querySelector("tbody").children[0].children[4].innerHTML = "Time (UTC)&nbsp;&nbsp;";
+        document.querySelector("tbody").children[0].children[4].innerHTML = "Time&nbsp;&nbsp;";
         document.querySelector("tbody").children[0].children[0].innerHTML = "Id&nbsp;▾";
     }
     else if (globalThis.sortByIdStat == 1)
@@ -329,7 +329,7 @@ function sortByTime()
             return parseInt(row.querySelector(".time").getAttribute("time"));
         });
         document.querySelector("tbody").children[0].children[0].innerHTML = "Id&nbsp;&nbsp;";
-        document.querySelector("tbody").children[0].children[4].innerHTML = "Time (UTC)&nbsp;▾";
+        document.querySelector("tbody").children[0].children[4].innerHTML = "Time&nbsp;▾";
     }
     else if (globalThis.sortByTimeStat == 1)
     {
@@ -337,7 +337,7 @@ function sortByTime()
         sortTable(globalThis.sortByTimeStat, function(row){
             return parseInt(row.querySelector(".time").getAttribute("time"));
         });
-        document.querySelector("tbody").children[0].children[4].innerHTML = "Time (UTC)&nbsp;▴";
+        document.querySelector("tbody").children[0].children[4].innerHTML = "Time&nbsp;▴";
     }
     else if (globalThis.sortByTimeStat == 2)
     {
@@ -345,6 +345,6 @@ function sortByTime()
         sortTable(globalThis.sortByTimeStat, function(row){
             return parseInt(row.querySelector(".time").getAttribute("time"));
         });
-        document.querySelector("tbody").children[0].children[4].innerHTML = "Time (UTC)&nbsp;▾";
+        document.querySelector("tbody").children[0].children[4].innerHTML = "Time&nbsp;▾";
     }
 }

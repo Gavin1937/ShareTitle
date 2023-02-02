@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.ResultSet;
 
+import org.json.JSONObject;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -14,6 +15,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.util.FileCopyUtils;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.io.InputStreamReader;
 import java.io.File;
 
@@ -200,6 +202,175 @@ public class DbManager
             MyLogger.debug("sql: {}", sql);
             Statement select = __dbConnection.createStatement();
             ResultSet rs = select.executeQuery(sql);
+            while (rs.next())
+            {
+                ret.add(
+                    new WebsiteModel(
+                        rs.getInt(1), rs.getString(2),
+                        rs.getString(3), rs.getString(4),
+                        rs.getInt(5), rs.getInt(6),
+                        rs.getInt(7)
+                    )
+                );
+            }
+        }
+        catch (SQLException e)
+        {
+            MyLogger.error("SQLException: " + e.getMessage());
+            return null;
+        }
+        return ret;
+    }
+    
+    /**
+     * 
+     * @param limit => int limit of sql query.
+     *  
+     * @param offset => int offset of sql query.
+     *  
+     * @param order => str order of sql query (ASC or DESC).
+     *  
+     * @param options => JSONObject of other sql parameters.
+     * <ul>
+     * <li>JSONObject can contain following keys</li>
+     * <li><ul>
+     * <li>id => int id of a website</li>
+     * <li>title => substring to search in website title</li>
+     * <li>url => substring to search in website url</li>
+     * <li>domain => str domain to search in website domain</li>
+     * <li>parent_child => int website parent_child status</li>
+     * <li>is_visited => int website is_visited status</li>
+     * <li>time_until => int unix timestamp to compare with website.time. Always use "<=" operator.</li>
+     * </ul></li>
+     * </ul>
+     *  
+     * @throws Exception
+     */
+    public ArrayList<WebsiteModel> queryWebsite(Integer limit, Integer offset, String order, JSONObject options)
+        throws Exception
+    {
+        __checkConnection();        
+        
+        ArrayList<WebsiteModel> ret = new ArrayList<WebsiteModel>();
+        try
+        {
+            // build sql from param
+            String sql = "SELECT * FROM websites ";
+            String sql_where = "WHERE 1=1 ";
+            String sql_order_limit = "";
+            Iterator<String> keys = options.keys();
+            while (keys.hasNext())
+            {
+                String key = keys.next();
+                if (key.equals("id"))
+                {
+                    sql_where += " AND id = ? ";
+                }
+                else if (key.equals("title"))
+                {
+                    sql_where += " AND title LIKE ? ";
+                }
+                else if (key.equals("url"))
+                {
+                    sql_where += " AND url LIKE ? ";
+                }
+                else if (key.equals("domain"))
+                {
+                    sql_where += " AND domain = ? ";
+                }
+                else if (key.equals("parent_child"))
+                {
+                    sql_where += " AND parent_child = ? ";
+                }
+                else if (key.equals("is_visited"))
+                {
+                    sql_where += " AND is_visited = ? ";
+                }
+                else if (key.equals("time_until"))
+                {
+                    sql_where += " AND time <= ? ";
+                }
+            }
+            if (order != null)
+            {
+                order = order.toUpperCase();
+                if (order.equals("ASC") || order.equals("DESC"))
+                {
+                    sql_order_limit += " ORDER BY id " + order + " ";
+                }
+                else 
+                {
+                    sql_order_limit += " ORDER BY id ASC ";
+                }
+            }
+            if (offset < 0)
+            {
+                offset = 0;
+            }
+            sql_order_limit += " LIMIT ? OFFSET ? ";
+            sql = sql + sql_where + sql_order_limit + ";";
+            
+            
+            MyLogger.debug("sql: {}", sql);
+            MyLogger.debug("limit: {}", limit);
+            MyLogger.debug("offset: {}", offset);
+            MyLogger.debug("order: {}", order);
+            MyLogger.debug("options: {}", options);
+            PreparedStatement select = __dbConnection.prepareStatement(sql);
+            Iterator<String> keys2 = options.keys();
+            int pos = 1;
+            while (keys2.hasNext())
+            {
+                String key = keys2.next();
+                if (key.equals("id"))
+                {
+                    select.setInt(pos, options.getInt(key));
+                }
+                else if (key.equals("title"))
+                {
+                    sql_where += " AND title LIKE ? ";
+                    select.setString(
+                        pos,
+                        "%"+options.getString(key).replace("%", "\\%")+"%"
+                    );
+                }
+                else if (key.equals("url"))
+                {
+                    sql_where += " AND url LIKE ? ";
+                    select.setString(
+                        pos,
+                        "%"+options.getString(key).replace("%", "\\%")+"%"
+                    );
+                }
+                else if (key.equals("domain"))
+                {
+                    sql_where += " AND domain = ? ";
+                    select.setString(
+                        pos, options.getString(key)
+                    );
+                }
+                else if (key.equals("parent_child"))
+                {
+                    select.setInt(pos, options.getInt(key));
+                }
+                else if (key.equals("is_visited"))
+                {
+                    select.setInt(pos, options.getInt(key));
+                }
+                else if (key.equals("time_until"))
+                {
+                    int timeUntil = -1;
+                    if (options.getString(key).equals("now"))
+                        timeUntil = Utilities.getUnixTimestampNow();
+                    else
+                        timeUntil = options.getInt(key);
+                    select.setInt(pos, timeUntil);
+                }
+                pos += 1;
+            }
+            select.setInt(pos, limit);
+            select.setInt(pos+1, offset);
+            ResultSet rs = select.executeQuery();
             while (rs.next())
             {
                 ret.add(

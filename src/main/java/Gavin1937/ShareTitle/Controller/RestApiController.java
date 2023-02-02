@@ -242,6 +242,117 @@ public class RestApiController
     
     
     /**
+     * GET query sharetitle(s) with parameters
+     * 
+     * @param
+     *  page => [optional][query parameter] int page of query results.
+     *  <ul>
+     *  <li>Each page has 50 results, default 0</li>
+     *  </ul>
+     *  
+     * @param
+     *  order => [optional][query parameter] string order of result.
+     *  <ul>
+     *  <li>Can be either "ASC" or "DESC", order by id.</li>
+     *  </ul>
+     *  
+     * @param
+     *  id => [optional][query parameter] int id of sharetitle.
+     *  
+     * @param
+     *  title => [optional][query parameter] str substring to search in sharetitle's title.
+     *  
+     * @param
+     *  url => [optional][query parameter] str substring to search in sharetitle's url.
+     *  
+     * @param
+     *  domain => [optional][query parameter] str domain of sharetitle.
+     *  
+     * @param
+     *  parent_child => [optional][query parameter] int value of sharetitle's parent_child status, either 0 or 1.
+     *  
+     * @param
+     *  is_visited => [optional][query parameter] int value of sharetitle's is_visited status, either 0 or 1.
+     *  
+     * @param
+     *  time_until => [optional][query parameter] int value of sharetitle's time.
+     *  <ul>
+     *  <li>Integer unix timestamp</li>
+     *  <li>When querying, this function will search for all sharetitles where sharetitle.time <= time_util</li>
+     *  <li>You can set it to "now" for current unix timestamp</li>
+     *  </ul>
+     *  
+     * @return response json string:
+     * <code>
+     * {
+     *  "sharetitles": [
+     *   {
+     *    "id": id,
+     *    "title": string,
+     *    "url": string,
+     *    "domain": string,
+     *    "parent_child": int,
+     *    "is_visited": int,
+     *    "time": int (timestamp)
+     *   },
+     *   ...
+     *  ],
+     *  "length": int,
+     *  "ok": boolean
+     * }
+     * </code>
+     *  
+     * @throws Exception
+     */
+    @GetMapping(value="/query")
+    public ResponseEntity<Object> querySharetitles(
+        @CookieValue(value="username", required=false) String username,
+        @CookieValue(value="auth_hash", required=false) String auth_hash,
+        @RequestParam(value="page", required=false, defaultValue="0") Integer page,
+        @RequestParam(value="order", required=false, defaultValue="ASC") String order,
+        @RequestParam(value="id", required=false) String id,
+        @RequestParam(value="title", required=false) String title,
+        @RequestParam(value="url", required=false) String url,
+        @RequestParam(value="domain", required=false) String domain,
+        @RequestParam(value="parent_child", required=false) String parent_child,
+        @RequestParam(value="is_visited", required=false) String is_visited,
+        @RequestParam(value="time_until", required=false) String time_until,
+        HttpServletRequest request, HttpServletResponse response
+    ) throws Exception
+    {
+        // Authentication
+        ResponseEntity<Object> auth_ret = __doAuth(request, username, auth_hash);
+        if (auth_ret != null)
+            return auth_ret;
+        
+        // generate response
+        JSONArray sharetitle = new JSONArray();
+        JSONObject options = new JSONObject();
+        if (id != null) { options.put("id", id); }
+        if (title != null) { options.put("title", title); }
+        if (url != null) { options.put("url", url); }
+        if (domain != null) { options.put("domain", domain); }
+        if (parent_child != null) { options.put("parent_child", parent_child); }
+        if (is_visited != null) { options.put("is_visited", is_visited); }
+        if (time_until != null) { options.put("time_until", time_until); }
+        int limit = 50;
+        int offset = page * limit;
+        ArrayList<WebsiteModel> websites = db.queryWebsite(limit, offset, order, options);
+        for (int idx = 0; idx < websites.size(); ++idx)
+        {
+            sharetitle.put(websites.get(idx).toJson());
+        }
+        JSONObject resp = new JSONObject();
+        resp.put("ok", (sharetitle.length() >= 0));
+        resp.put("length", sharetitle.length());
+        resp.put("sharetitles", sharetitle);
+        
+        Utilities.logRequestResp("INFO", request, resp);
+        return Utilities.genJsonResponse(resp, HttpStatus.OK);
+    }
+    
+    
+    /**
      * GET sharetitle form database specified by id
      * 
      * @param

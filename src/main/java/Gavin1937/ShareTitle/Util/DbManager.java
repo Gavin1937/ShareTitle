@@ -351,11 +351,27 @@ public class DbManager
                 }
                 else if (key.equals("parent_child"))
                 {
-                    select.setInt(pos, options.getInt(key));
+                    String pcval = options.getString(key);
+                    int pcval2 = -1;
+                    if (pcval.equals("parent"))
+                        pcval2 = 0;
+                    else if (pcval.equals("child"))
+                        pcval2 = 1;
+                    else
+                        pcval2 = Integer.parseInt(pcval);
+                    select.setInt(pos, pcval2);
                 }
                 else if (key.equals("is_visited"))
                 {
-                    select.setInt(pos, options.getInt(key));
+                    String visitedVal = options.getString(key);
+                    int visitedVal2 = -1;
+                    if (visitedVal.equals("visited"))
+                        visitedVal2 = 1;
+                    else if (visitedVal.equals("unvisited"))
+                        visitedVal2 = 0;
+                    else
+                        visitedVal2 = Integer.parseInt(visitedVal);
+                    select.setInt(pos, visitedVal2);
                 }
                 else if (key.equals("time_until"))
                 {

@@ -85,7 +85,13 @@
   * **url** => [optional][query parameter] str substring to search in sharetitle's url.
   * **domain** => [optional][query parameter] str domain of sharetitle.
   * **parent_child** => [optional][query parameter] int value of sharetitle's parent_child status, either 0 or 1.
+    * 0 => parent
+    * 1 => child
+    * You can set it to "parent" (0) or "child" (1) for readability.
   * **is_visited** => [optional][query parameter] int value of sharetitle's is_visited status, either 0 or 1.
+    * 0 => unvisited
+    * 1 => visited
+    * You can set it to "unvisited" (0) or "visited" (1) for readability.
   * **time_until** => [optional][query parameter] int value of sharetitle's time.
     * Integer unix timestamp
     * When querying, this api will search for all sharetitles where sharetitle.time <= time_util

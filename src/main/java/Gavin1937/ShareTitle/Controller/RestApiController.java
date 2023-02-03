@@ -270,9 +270,19 @@ public class RestApiController
      *  
      * @param
      *  parent_child => [optional][query parameter] int value of sharetitle's parent_child status, either 0 or 1.
+     *  <ul>
+     *  <li>0 => parent</li>
+     *  <li>1 => child</li>
+     *  <li>You can set it to "parent" (0) or "child" (1) for readability.</li>
+     *  </ul>
      *  
      * @param
      *  is_visited => [optional][query parameter] int value of sharetitle's is_visited status, either 0 or 1.
+     *  <ul>
+     *  <li>0 => unvisited</li>
+     *  <li>1 => visited</li>
+     *  <li>You can set it to "unvisited" (0) or "visited" (1) for readability.</li>
+     *  </ul>
      *  
      * @param
      *  time_until => [optional][query parameter] int value of sharetitle's time.

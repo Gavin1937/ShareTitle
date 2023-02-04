@@ -82,7 +82,9 @@
     * Can be either "ASC" or "DESC", order by id.
   * **id** => [optional][query parameter] int id of sharetitle.
   * **title** => [optional][query parameter] str substring to search in sharetitle's title.
+  * **rtitle** => [optional][query parameter] str regex to search in sharetitle's title.
   * **url** => [optional][query parameter] str substring to search in sharetitle's url.
+  * **rurl** => [optional][query parameter] str regex to search in sharetitle's url.
   * **domain** => [optional][query parameter] str domain of sharetitle.
   * **parent_child** => [optional][query parameter] int value of sharetitle's parent_child status, either 0 or 1.
     * 0 => parent

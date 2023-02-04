@@ -263,7 +263,13 @@ public class RestApiController
      *  title => [optional][query parameter] str substring to search in sharetitle's title.
      *  
      * @param
+     *  rtitle => [optional][query parameter] str regex to search in sharetitle's title.
+     *  
+     * @param
      *  url => [optional][query parameter] str substring to search in sharetitle's url.
+     *  
+     * @param
+     *  rurl => [optional][query parameter] str regex to search in sharetitle's url.
      *  
      * @param
      *  domain => [optional][query parameter] str domain of sharetitle.
@@ -322,7 +328,9 @@ public class RestApiController
         @RequestParam(value="order", required=false, defaultValue="ASC") String order,
         @RequestParam(value="id", required=false) String id,
         @RequestParam(value="title", required=false) String title,
+        @RequestParam(value="rtitle", required=false) String rtitle,
         @RequestParam(value="url", required=false) String url,
+        @RequestParam(value="rurl", required=false) String rurl,
         @RequestParam(value="domain", required=false) String domain,
         @RequestParam(value="parent_child", required=false) String parent_child,
         @RequestParam(value="is_visited", required=false) String is_visited,
@@ -340,7 +348,9 @@ public class RestApiController
         JSONObject options = new JSONObject();
         if (id != null) { options.put("id", id); }
         if (title != null) { options.put("title", title); }
+        if (rtitle != null) { options.put("rtitle", rtitle); }
         if (url != null) { options.put("url", url); }
+        if (rurl != null) { options.put("rurl", rurl); }
         if (domain != null) { options.put("domain", domain); }
         if (parent_child != null) { options.put("parent_child", parent_child); }
         if (is_visited != null) { options.put("is_visited", is_visited); }

@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.ResultSet;
+import org.sqlite.Function;
 
 import org.json.JSONObject;
 import org.springframework.context.ApplicationContext;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.io.InputStreamReader;
 import java.io.File;
+import java.util.regex.Pattern;
 
 import Gavin1937.ShareTitle.Model.WebsiteModel;
 import Gavin1937.ShareTitle.Util.TitleParser;
@@ -236,7 +238,9 @@ public class DbManager
      * <li><ul>
      * <li>id => int id of a website</li>
      * <li>title => substring to search in website title</li>
+     * <li>rtitle => regex to search in website title</li>
      * <li>url => substring to search in website url</li>
+     * <li>rurl => regex to search in website url</li>
      * <li>domain => str domain to search in website domain</li>
      * <li>parent_child => int website parent_child status</li>
      * <li>is_visited => int website is_visited status</li>
@@ -270,9 +274,17 @@ public class DbManager
                 {
                     sql_where += " AND title LIKE ? ";
                 }
+                else if (key.equals("rtitle"))
+                {
+                    sql_where += " AND title REGEXP ? ";
+                }
                 else if (key.equals("url"))
                 {
                     sql_where += " AND url LIKE ? ";
+                }
+                else if (key.equals("rurl"))
+                {
+                    sql_where += " AND url REGEXP ? ";
                 }
                 else if (key.equals("domain"))
                 {
@@ -328,23 +340,32 @@ public class DbManager
                 }
                 else if (key.equals("title"))
                 {
-                    sql_where += " AND title LIKE ? ";
                     select.setString(
                         pos,
-                        "%"+options.getString(key).replace("%", "\\%")+"%"
+                        "%"+__rmSqlWildcards(options.getString(key))+"%"
+                    );
+                }
+                else if (key.equals("rtitle"))
+                {
+                    select.setString(
+                        pos, options.getString(key)
                     );
                 }
                 else if (key.equals("url"))
                 {
-                    sql_where += " AND url LIKE ? ";
                     select.setString(
                         pos,
-                        "%"+options.getString(key).replace("%", "\\%")+"%"
+                        "%"+__rmSqlWildcards(options.getString(key))+"%"
+                    );
+                }
+                else if (key.equals("rurl"))
+                {
+                    select.setString(
+                        pos, options.getString(key)
                     );
                 }
                 else if (key.equals("domain"))
                 {
-                    sql_where += " AND domain = ? ";
                     select.setString(
                         pos, options.getString(key)
                     );
@@ -617,6 +638,13 @@ public class DbManager
         return sql_lines;
     }
     
+    private String __rmSqlWildcards(String sql)
+    {
+        sql = sql.replace("%", "\\%");
+        sql = sql.replace("_", "\\_");
+        return sql;
+    }
+    
     private void __initDb(String dbpath)
         throws Exception
     {
@@ -658,6 +686,24 @@ public class DbManager
                 ps.executeUpdate();
             }
             
+            // add REGEXP functionality to current connection
+            // https://github.com/xerial/sqlite-jdbc/issues/60#issuecomment-152668620
+            // https://github.com/xerial/sqlite-jdbc/issues/429
+            Function.create(
+                __dbConnection,
+                "REGEXP",
+                new Function() {
+                    @Override
+                    protected void xFunc() throws SQLException {
+                        String expression = value_text(0);
+                        String value = value_text(1);
+                        if (value == null)
+                            value = "";
+                        Pattern pattern=Pattern.compile(expression);
+                        result(pattern.matcher(value).find() ? 1 : 0);
+                    }
+                }
+            );
         }
         catch (Exception e)
         {

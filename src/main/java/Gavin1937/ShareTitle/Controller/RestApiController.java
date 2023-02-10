@@ -288,6 +288,7 @@ public class RestApiController
      *  <li>0 => unvisited</li>
      *  <li>1 => visited</li>
      *  <li>You can set it to "unvisited" (0) or "visited" (1) for readability.</li>
+     *  <li>You can query both visited and unvisited by supplying string "all".</li>
      *  </ul>
      *  
      * @param

@@ -94,6 +94,7 @@
     * 0 => unvisited
     * 1 => visited
     * You can set it to "unvisited" (0) or "visited" (1) for readability.
+    * You can query both visited and unvisited by supplying string "all".
   * **time_until** => [optional][query parameter] int value of sharetitle's time.
     * Integer unix timestamp
     * When querying, this api will search for all sharetitles where sharetitle.time <= time_util

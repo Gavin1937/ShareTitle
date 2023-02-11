@@ -292,15 +292,17 @@ public class DbManager
                 }
                 else if (key.equals("parent_child"))
                 {
-                    sql_where += " AND parent_child = ? ";
-                }
-                else if (options.getString(key).toLowerCase().equals("all"))
-                {
-                    options.remove(key);
+                    if (options.getString(key).toLowerCase().equals("all"))
+                        options.remove(key);
+                    else
+                        sql_where += " AND parent_child = ? ";
                 }
                 else if (key.equals("is_visited"))
                 {
-                    sql_where += " AND is_visited = ? ";
+                    if (options.getString(key).toLowerCase().equals("all"))
+                        options.remove(key);
+                    else
+                        sql_where += " AND is_visited = ? ";
                 }
                 else if (key.equals("time_until"))
                 {

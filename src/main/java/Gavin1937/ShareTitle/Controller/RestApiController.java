@@ -280,6 +280,7 @@ public class RestApiController
      *  <li>0 => parent</li>
      *  <li>1 => child</li>
      *  <li>You can set it to "parent" (0) or "child" (1) for readability.</li>
+     *  <li>You can query both parent and child by supplying string "all".</li>
      *  </ul>
      *  
      * @param

@@ -90,6 +90,7 @@
     * 0 => parent
     * 1 => child
     * You can set it to "parent" (0) or "child" (1) for readability.
+    * You can query both parent and child by supplying string "all".
   * **is_visited** => [optional][query parameter] int value of sharetitle's is_visited status, either 0 or 1.
     * 0 => unvisited
     * 1 => visited

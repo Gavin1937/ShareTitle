@@ -293,14 +293,14 @@ public class DbManager
                 else if (key.equals("parent_child"))
                 {
                     if (options.getString(key).toLowerCase().equals("all"))
-                        options.remove(key);
+                        keys.remove();
                     else
                         sql_where += " AND parent_child = ? ";
                 }
                 else if (key.equals("is_visited"))
                 {
                     if (options.getString(key).toLowerCase().equals("all"))
-                        options.remove(key);
+                        keys.remove();
                     else
                         sql_where += " AND is_visited = ? ";
                 }

@@ -39,6 +39,8 @@ build/
 *.log
 *.zip
 *.sh
+*.bat
+*.ps1
 
 ### folders ###
 

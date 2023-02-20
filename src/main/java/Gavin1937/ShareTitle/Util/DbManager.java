@@ -253,7 +253,7 @@ public class DbManager
     public ArrayList<WebsiteModel> queryWebsite(Integer limit, Integer offset, String order, JSONObject options)
         throws Exception
     {
-        __checkConnection();        
+        __checkConnection();
         
         ArrayList<WebsiteModel> ret = new ArrayList<WebsiteModel>();
         try
@@ -272,7 +272,7 @@ public class DbManager
                 }
                 else if (key.equals("title"))
                 {
-                    sql_where += " AND title LIKE ? ";
+                    sql_where += " AND title LIKE ? ESCAPE '\\' ";
                 }
                 else if (key.equals("rtitle"))
                 {
@@ -280,7 +280,7 @@ public class DbManager
                 }
                 else if (key.equals("url"))
                 {
-                    sql_where += " AND url LIKE ? ";
+                    sql_where += " AND url LIKE ? ESCAPE '\\' ";
                 }
                 else if (key.equals("rurl"))
                 {

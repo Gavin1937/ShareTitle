@@ -106,6 +106,13 @@ This file tells application how to parse plain text data input by user.
 
 ## frontend
 
+### This frontend is DEPRECATED, consider my [new frontend](https://github.com/Gavin1937/ShareTitle_react) written in react.
+
+**new frontend doen't support Register Feature**
+
+<details>
+<summary>DEPRECATED</summary>
+
 ### frontend path: `/sharetitle`
 
 Simply visit [http://localhost:8080/sharetitle](http://localhost:8080/sharetitle) and start navigating
@@ -159,8 +166,14 @@ You can use [login.jsp](./src/main/webapp/WEB-INF/jsp/login.jsp) and [login.js](
 
 Finally [rebuild the project](#build)
 
+</details>
+
 
 ## Deploy
+
+### Deploy whole ShareTitle project with docker-compose (Recommend)
+
+[check out this repo](https://github.com/Gavin1937/ShareTitle_docker_compose)
 
 ### Deploy with Docker (Recommend)
 

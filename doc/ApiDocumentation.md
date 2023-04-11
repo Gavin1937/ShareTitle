@@ -81,6 +81,10 @@
   * **order** => [optional][query parameter] string order of result.
     * Can be either "ASC" or "DESC", order by id.
   * **id** => [optional][query parameter] int id of sharetitle.
+  * **id_greater_then** => [optional][query parameter] return sharetitle with id greater then this id.
+  * **id_greater_eq** => [optional][query parameter] return sharetitle with id greater then & equal to this id.
+  * **id_less_then** => [optional][query parameter] return sharetitle with id less then this id.
+  * **id_less_eq** => [optional][query parameter] return sharetitle with id less then & equal to this id.
   * **title** => [optional][query parameter] str substring to search in sharetitle's title.
   * **rtitle** => [optional][query parameter] str regex to search in sharetitle's title.
   * **url** => [optional][query parameter] str substring to search in sharetitle's url.
@@ -99,6 +103,10 @@
   * **time_until** => [optional][query parameter] int value of sharetitle's time.
     * Integer unix timestamp
     * When querying, this api will search for all sharetitles where sharetitle.time <= time_util
+    * You can set it to "now" for current unix timestamp
+  * **time_after** => [optional][query parameter] int value of sharetitle's time.
+    * Integer unix timestamp
+    * When querying, this api will search for all sharetitles where sharetitle.time >= time_after
     * You can set it to "now" for current unix timestamp
 * Returns:
 

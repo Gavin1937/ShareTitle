@@ -260,6 +260,18 @@ public class RestApiController
      *  id => [optional][query parameter] int id of sharetitle.
      *  
      * @param
+     *  id_greater_then => [optional][query parameter] return sharetitle with id greater then this id.
+     *  
+     * @param
+     *  id_greater_eq => [optional][query parameter] return sharetitle with id greater then & equal to this id.
+     *  
+     * @param
+     *  id_less_then => [optional][query parameter] return sharetitle with id less then this id.
+     *  
+     * @param
+     *  id_less_eq => [optional][query parameter] return sharetitle with id less then & equal to this id.
+     *  
+     * @param
      *  title => [optional][query parameter] str substring to search in sharetitle's title.
      *  
      * @param
@@ -300,6 +312,14 @@ public class RestApiController
      *  <li>You can set it to "now" for current unix timestamp</li>
      *  </ul>
      *  
+     * @param
+     *  time_after => [optional][query parameter] int value of sharetitle's time.
+     *  <ul>
+     *  <li>Integer unix timestamp</li>
+     *  <li>When querying, this function will search for all sharetitles where sharetitle.time >= time_after</li>
+     *  <li>You can set it to "now" for current unix timestamp</li>
+     *  </ul>
+     *  
      * @return response json string:
      * <code>
      * {
@@ -329,6 +349,10 @@ public class RestApiController
         @RequestParam(value="page", required=false, defaultValue="0") Integer page,
         @RequestParam(value="order", required=false, defaultValue="ASC") String order,
         @RequestParam(value="id", required=false) String id,
+        @RequestParam(value="id_greater_then", required=false) String id_greater_then,
+        @RequestParam(value="id_greater_eq", required=false) String id_greater_eq,
+        @RequestParam(value="id_less_then", required=false) String id_less_then,
+        @RequestParam(value="id_less_eq", required=false) String id_less_eq,
         @RequestParam(value="title", required=false) String title,
         @RequestParam(value="rtitle", required=false) String rtitle,
         @RequestParam(value="url", required=false) String url,
@@ -337,6 +361,7 @@ public class RestApiController
         @RequestParam(value="parent_child", required=false) String parent_child,
         @RequestParam(value="is_visited", required=false) String is_visited,
         @RequestParam(value="time_until", required=false) String time_until,
+        @RequestParam(value="time_after", required=false) String time_after,
         HttpServletRequest request, HttpServletResponse response
     ) throws Exception
     {
@@ -349,6 +374,10 @@ public class RestApiController
         JSONArray sharetitle = new JSONArray();
         JSONObject options = new JSONObject();
         if (id != null) { options.put("id", id); }
+        if (id_greater_then != null) { options.put("id_greater_then", id_greater_then); }
+        if (id_greater_eq != null) { options.put("id_greater_eq", id_greater_eq); }
+        if (id_less_then != null) { options.put("id_less_then", id_less_then); }
+        if (id_less_eq != null) { options.put("id_less_eq", id_less_eq); }
         if (title != null) { options.put("title", title); }
         if (rtitle != null) { options.put("rtitle", rtitle); }
         if (url != null) { options.put("url", url); }
@@ -357,6 +386,7 @@ public class RestApiController
         if (parent_child != null) { options.put("parent_child", parent_child); }
         if (is_visited != null) { options.put("is_visited", is_visited); }
         if (time_until != null) { options.put("time_until", time_until); }
+        if (time_after != null) { options.put("time_after", time_after); }
         int limit = 50;
         int offset = page * limit;
         ArrayList<WebsiteModel> websites = db.queryWebsite(limit, offset, order, options);

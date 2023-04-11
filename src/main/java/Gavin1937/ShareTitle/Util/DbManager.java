@@ -270,6 +270,22 @@ public class DbManager
                 {
                     sql_where += " AND id = ? ";
                 }
+                else if (key.equals("id_greater_then"))
+                {
+                    sql_where += " AND id > ? ";
+                }
+                else if (key.equals("id_greater_eq"))
+                {
+                    sql_where += " AND id >= ? ";
+                }
+                else if (key.equals("id_less_then"))
+                {
+                    sql_where += " AND id < ? ";
+                }
+                else if (key.equals("id_less_eq"))
+                {
+                    sql_where += " AND id <= ? ";
+                }
                 else if (key.equals("title"))
                 {
                     sql_where += " AND title LIKE ? ESCAPE '\\' ";
@@ -308,6 +324,10 @@ public class DbManager
                 {
                     sql_where += " AND time <= ? ";
                 }
+                else if (key.equals("time_after"))
+                {
+                    sql_where += " AND time >= ? ";
+                }
             }
             if (order != null)
             {
@@ -341,6 +361,22 @@ public class DbManager
             {
                 String key = keys2.next();
                 if (key.equals("id"))
+                {
+                    select.setInt(pos, options.getInt(key));
+                }
+                else if (key.equals("id_greater_then"))
+                {
+                    select.setInt(pos, options.getInt(key));
+                }
+                else if (key.equals("id_greater_eq"))
+                {
+                    select.setInt(pos, options.getInt(key));
+                }
+                else if (key.equals("id_less_then"))
+                {
+                    select.setInt(pos, options.getInt(key));
+                }
+                else if (key.equals("id_less_eq"))
                 {
                     select.setInt(pos, options.getInt(key));
                 }
@@ -408,6 +444,15 @@ public class DbManager
                     else
                         timeUntil = options.getInt(key);
                     select.setInt(pos, timeUntil);
+                }
+                else if (key.equals("time_after"))
+                {
+                    int timeAfter = -1;
+                    if (options.getString(key).equals("now"))
+                        timeAfter = Utilities.getUnixTimestampNow();
+                    else
+                        timeAfter = options.getInt(key);
+                    select.setInt(pos, timeAfter);
                 }
                 pos += 1;
             }

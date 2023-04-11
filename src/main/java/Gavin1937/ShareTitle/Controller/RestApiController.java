@@ -251,6 +251,13 @@ public class RestApiController
      *  </ul>
      *  
      * @param
+     *  limit => [optional][query parameter] int limit of query results in each page.
+     *  <ul>
+     *  <li>Default limit 50</li>
+     *  <li>Use -1 for all</li>
+     *  </ul>
+     *  
+     * @param
      *  order => [optional][query parameter] string order of result.
      *  <ul>
      *  <li>Can be either "ASC" or "DESC", order by id.</li>
@@ -347,6 +354,7 @@ public class RestApiController
         @CookieValue(value="username", required=false) String username,
         @CookieValue(value="auth_hash", required=false) String auth_hash,
         @RequestParam(value="page", required=false, defaultValue="0") Integer page,
+        @RequestParam(value="limit", required=false, defaultValue="50") Integer limit,
         @RequestParam(value="order", required=false, defaultValue="ASC") String order,
         @RequestParam(value="id", required=false) String id,
         @RequestParam(value="id_greater_then", required=false) String id_greater_then,
@@ -387,7 +395,7 @@ public class RestApiController
         if (is_visited != null) { options.put("is_visited", is_visited); }
         if (time_until != null) { options.put("time_until", time_until); }
         if (time_after != null) { options.put("time_after", time_after); }
-        int limit = 50;
+        
         int offset = page * limit;
         ArrayList<WebsiteModel> websites = db.queryWebsite(limit, offset, order, options);
         for (int idx = 0; idx < websites.size(); ++idx)

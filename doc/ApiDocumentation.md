@@ -78,6 +78,9 @@
 * optional query paramters
   * **page** => [optional][query parameter] int page of query results.
     * Each page has 50 results, default 0
+  * **limit** => [optional][query parameter] int limit of query results in each page.
+    * Default limit 50
+    * Use -1 for all
   * **order** => [optional][query parameter] string order of result.
     * Can be either "ASC" or "DESC", order by id.
   * **id** => [optional][query parameter] int id of sharetitle.

@@ -41,27 +41,14 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: svenstaro/upload-release-action@v2
       with:
-        tag_name: heading
-        release_name: heading
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: './ShareTitle.zip'
+        asset_name: 'ShareTitle.zip'
+        tag: 'heading'
+        overwrite: true
         body: 'This release is a release of the HEAD of main branch. It will update as HEAD updates.'
-        draft: false
-        prerelease: false
-    
-    - name: Upload Release Asset
-      id: upload-release-asset 
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./ShareTitle.zip
-        asset_name: ShareTitle.zip
-        asset_content_type: application/zip
     
     - name: Delete Drafts
       uses: hugo19941994/delete-draft-releases@v1.0.0

@@ -104,26 +104,19 @@ This file tells application how to parse plain text data input by user.
 * You can use provided [parseScript.json](./data/parseScript.json) file as your foundation.
 
 
-## frontend
+## Frontend
 
-### This frontend is DEPRECATED, consider my [new frontend](https://github.com/Gavin1937/ShareTitle_react) written in react.
+### Frontend application for this project: [ShareTitle_react](https://github.com/Gavin1937/ShareTitle_react)
 
-**new frontend doen't support Register Feature**
+### About authentication
 
-<details>
-<summary>DEPRECATED</summary>
+If you set `require_auth` to true in [config.json](#configjson) you will be redirect to a login page in the frontend.
 
-### frontend path: `/sharetitle`
+Register feature does not come with the application, you need to manually edit the authentication database.
 
-Simply visit [http://localhost:8080/sharetitle](http://localhost:8080/sharetitle) and start navigating
+If you really want a register page, checkout [next section](#add-register-feature)
 
-If you set `require_auth` to true in [config.json](#configjson) you will be redirect to [http://localhost:8080/login](http://localhost:8080/login) with a login frontend.
-
-Register feature does not come with the application, you need to manually edit database.
-
-If you really want a register page, checkout [next section](#enable-register)
-
-Sample code
+Sample code for setup authentication database
 
 ```
 // open database
@@ -133,7 +126,7 @@ $ sqlite3 /path/to/sharetitle_auth.sqlite3
 INSERT INTO auth VALUES("username", "auth_hash");
 ```
 
-`auth_hash` in authentication database is calculate by md5 with combination of username and password. (checkout [init_auth_db.sql](./src/main/resources/sql/init_auth_db.sql) for table schema)
+`auth_hash` in the authentication database is calculated by md5 with combination of username and password. (checkout [init_auth_db.sql](./src/main/resources/sql/init_auth_db.sql) for table schema)
 
 Sample python3 code to generate `auth_hash`
 
@@ -151,22 +144,14 @@ print(
 
 Note that `auth_hash` requires a **lowercase username** combined with a password (no case requirement)
 
-After you put your account in database, you can login in the frontend.
+After you put your account into the database, you can login in the frontend.
 
 
 ### Add Register Feature
 
-To add register feature, uncomment `register()` function in [AuthManager.java](./src/main/java/Gavin1937/ShareTitle/Util/AuthManager.java) and `postRegister()` function in [WebappController.java](./src/main/java/Gavin1937/ShareTitle/Controller/WebappController.java)
+To add register feature, uncomment `register()` function in [AuthManager.java](./src/main/java/Gavin1937/ShareTitle/Util/AuthManager.java) to enable register backend api.
 
-Next, you need to implement a register form as your frontend.
-
-Do a POST request to path `/register` with request parameters `username` and `auth_hash`
-
-You can use [login.jsp](./src/main/webapp/WEB-INF/jsp/login.jsp) and [login.js](./src/main/resources/static/js/login.js) in the project as your foundation.
-
-Finally [rebuild the project](#build)
-
-</details>
+And then you need to write a register frontend page in [ShareTitle_react](https://github.com/Gavin1937/ShareTitle_react)
 
 
 ## Deploy
@@ -175,7 +160,7 @@ Finally [rebuild the project](#build)
 
 [check out this repo](https://github.com/Gavin1937/ShareTitle_docker_compose)
 
-### Deploy with Docker (Recommend)
+### Deploy backend with Docker
 
 Note that application working directory in container is **/app**
 

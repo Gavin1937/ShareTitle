@@ -16,12 +16,10 @@ FROM openjdk:17-alpine
 
 WORKDIR /app
 
-RUN mkdir -p ./src/main/webapp && \
-    mkdir -p ./target && \
+RUN mkdir -p ./target && \
     mkdir -p ./data
 
 COPY pom.xml .
-COPY src/main/webapp ./src/main/webapp
 COPY --from=build /tmp/build/target/ShareTitle.jar ./target
 
 ENTRYPOINT ["java","-jar","target/ShareTitle.jar"]

@@ -137,7 +137,7 @@ print(
     (
       input('Enter username: ').strip().lower() + 
       input('Enter password: ').strip()
-    ).encode('ascii')
+    ).encode('utf-8')
   ).hexdigest()
 )
 ```

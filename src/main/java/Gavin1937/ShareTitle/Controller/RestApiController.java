@@ -137,6 +137,8 @@ public class RestApiController
         if (auth_ret != null)
             return auth_ret;
         
+        MyLogger.debug("is_visit: {}, reverse: {}", is_visit, reverse);
+        
         // generate response
         JSONArray sharetitle = new JSONArray();
         int limit = -1;
@@ -220,6 +222,8 @@ public class RestApiController
         ResponseEntity<Object> auth_ret = __doAuth(request, username, auth_hash);
         if (auth_ret != null)
             return auth_ret;
+        
+        MyLogger.debug("is_visit: {}, reverse: {}", is_visit, reverse);
         
         // generate response
         JSONArray sharetitle = new JSONArray();
@@ -395,8 +399,13 @@ public class RestApiController
         if (is_visited != null) { options.put("is_visited", is_visited); }
         if (time_until != null) { options.put("time_until", time_until); }
         if (time_after != null) { options.put("time_after", time_after); }
-        
         int offset = page * limit;
+        
+        MyLogger.debug("limit: {}", limit);
+        MyLogger.debug("offset: {}", offset);
+        MyLogger.debug("order: {}", order);
+        MyLogger.debug("options: {}", options.toString());
+        
         ArrayList<WebsiteModel> websites = db.queryWebsite(limit, offset, order, options);
         for (int idx = 0; idx < websites.size(); ++idx)
         {
@@ -448,6 +457,8 @@ public class RestApiController
         ResponseEntity<Object> auth_ret = __doAuth(request, username, auth_hash);
         if (auth_ret != null)
             return auth_ret;
+        
+        MyLogger.debug("id: {}", id);
         
         // generate response
         WebsiteModel website = db.getWebsite(id);
@@ -509,6 +520,8 @@ public class RestApiController
         if (auth_ret != null)
             return auth_ret;
         
+        MyLogger.debug("data: {}", data);
+        
         // handle bad input data
         if (data == null || data.strip().isEmpty())
         {
@@ -567,6 +580,8 @@ public class RestApiController
         if (auth_ret != null)
             return auth_ret;
         
+        MyLogger.debug("id: {}", id);
+        
         // generate response
         int retId = db.deleteWebsite(id);
         HttpStatus status = HttpStatus.OK;
@@ -621,6 +636,8 @@ public class RestApiController
         if (auth_ret != null)
             return auth_ret;
         
+        MyLogger.debug("id: {}", id);
+        
         // generate response
         ArrayList<Integer> toggleRes = db.toggleVisited(id);
         HttpStatus status = HttpStatus.OK;
@@ -656,6 +673,8 @@ public class RestApiController
         ResponseEntity<Object> ret = null;
         if (!AuthManager.isAuthRequired())
             return ret;
+        
+        MyLogger.debug("username: {}, auth_hash: {}", username, auth_hash);
         
         try
         {

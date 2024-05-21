@@ -39,11 +39,19 @@ public class TitleParser
         return false;
     }
     
+    public static void loadParseScript()
+        throws IOException
+    {
+        String content = FileUtils.readFileToString(new File(__path), "UTF-8");
+        __parseScript = new JSONArray(content);
+        MyLogger.debug("__parseScript: {}", __parseScript.toString());
+    }
+    
     public static void setParseScript(String path)
         throws IOException
     {
-        String content = FileUtils.readFileToString(new File(path), "UTF-8");
-        __parseScript = new JSONArray(content);
+        __path = path;
+        loadParseScript();
     }
     
     public static boolean isEmpty()
@@ -96,6 +104,7 @@ public class TitleParser
     
     // private members
     private static JSONArray __parseScript;
+    private static String __path;
     private static String __title;
     private static String __url;
     private static String __domain;

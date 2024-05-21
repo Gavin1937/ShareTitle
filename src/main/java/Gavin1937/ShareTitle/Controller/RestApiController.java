@@ -1,5 +1,6 @@
 package Gavin1937.ShareTitle.Controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import Gavin1937.ShareTitle.Model.WebsiteModel;
 import Gavin1937.ShareTitle.Util.DbManager;
 import Gavin1937.ShareTitle.Util.AuthManager;
+import Gavin1937.ShareTitle.Util.TitleParser;
 import Gavin1937.ShareTitle.Util.MyLogger;
 import Gavin1937.ShareTitle.Util.Utilities;
 
@@ -657,6 +659,52 @@ public class RestApiController
             resp.put("time", toggleRes.get(1));
             resp.put("id", id);
             Utilities.logRequestResp("INFO", request, resp);
+        }
+        
+        return Utilities.genJsonResponse(resp, status);
+    }
+    
+    
+    /**
+     * POST (re)load parseScript.json.
+     * 
+     * @return response json string:
+     * <code>
+     * {
+     *  "ok": boolean
+     * }
+     * </code>
+     *  
+     * @throws Exception
+     */
+    @PostMapping(value={"/loadparsescript"})
+    public ResponseEntity<Object> postLoadParseScript(
+        @CookieValue(value="username", required=false) String username,
+        @CookieValue(value="auth_hash", required=false) String auth_hash,
+        HttpServletRequest request, HttpServletResponse response
+    ) throws Exception
+    {
+        // Authentication
+        ResponseEntity<Object> auth_ret = __doAuth(request, username, auth_hash);
+        if (auth_ret != null)
+            return auth_ret;
+        
+        // generate response
+        HttpStatus status = HttpStatus.OK;
+        JSONObject resp = new JSONObject();
+        try
+        {
+            TitleParser.loadParseScript();
+            status = HttpStatus.OK;
+            resp.put("ok", true);
+            Utilities.logRequestResp("INFO", request, resp);
+        }
+        catch (IOException err) {
+            MyLogger.error("Exception: {}", err.toString());
+            status = HttpStatus.BAD_REQUEST;
+            resp.put("ok", false);
+            resp.put("error", "Fail to (re)load parse script");
+            Utilities.logRequestResp("WARN", request, resp);
         }
         
         return Utilities.genJsonResponse(resp, status);

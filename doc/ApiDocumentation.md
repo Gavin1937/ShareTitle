@@ -183,6 +183,16 @@
 }
 ```
 
+## POST `/loadparsescript`
+
+* POST (re)load parseScript.json.
+* Return
+```json
+{
+ "ok": boolean
+}
+```
+
 ## Errors
 
 * Most errors are following this format

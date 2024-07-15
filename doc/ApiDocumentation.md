@@ -183,7 +183,7 @@
 }
 ```
 
-## POST `/loadparsescript`
+## POST `/api/loadparsescript`
 
 * POST (re)load parseScript.json.
 * Return
